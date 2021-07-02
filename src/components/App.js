@@ -8,9 +8,6 @@ import './app.scss'
 import Tags from "./Tags";
 import { Component } from "react";
 
-
-
-
 class App extends Component {
 
     state = {
@@ -22,13 +19,15 @@ class App extends Component {
     }
 
     componentDidMount() {
+        console.log("App mounting ")
         this.setState(Object.assign(this.state, {
             tags: [
-                { tagName: "design" },
-                { tagName: "code" },
-                { tagName: "work" },
-                { tagName: "social" },
-                { tagName: "games" }],
+                // { tagName: "design" },
+                // { tagName: "code" },
+                // { tagName: "work" },
+                // { tagName: "social" },
+                // { tagName: "games" }
+            ],
 
             links: [
                 { linkName: "Dribble", tagName: "design", url: "https://dribbble.com/" },
@@ -38,6 +37,10 @@ class App extends Component {
                 { linkName: "Eloquent JS", tagName: "code", url: "https://eloquentjavascript.net/index.html" }
             ]
         }))
+    }
+
+    componentWillUnmount() {
+        console.log("App unmounting")
     }
 
     onAddLinkBtnClick = () => {
@@ -64,6 +67,10 @@ class App extends Component {
         this.setState(Object.assign(this.state, { searchTerm }))
     }
 
+    onTagSave = (tag) => {
+        this.setState(Object.assign(this.state, { tags: [...this.state.tags, tag] }))
+    }
+
     onLinkSave = () => {
         this.setState(Object.assign(this.state, { addLink: false }))
     }
@@ -72,7 +79,6 @@ class App extends Component {
         this.setState(Object.assign(this.state, { addLink: false }))
     }
 
-
     filterLinksBySearchTerm() {
         return this.state.links.filter(link =>
             JSON.stringify(link)
@@ -80,11 +86,9 @@ class App extends Component {
                 .includes(this.state.searchTerm.toUpperCase()));
     }
 
-
     filterLinksByTag() {
         return this.state.links.filter(link => link.tagName === this.state.selectedTag);
     }
-
 
     render() {
 
@@ -115,8 +119,12 @@ class App extends Component {
                     <Button label="Add Link" iconClass="plus" onClick={this.onAddLinkBtnClick}>/</Button>
                 </Header>
                 <Search searchTerm={this.state.searchTerm} onSearchTermChange={this.onSearchTermChange}></Search>
-                <Tags selectedTag={this.state.selectedTag} tags={this.state.tags} onTagClick={this.onTagClick}></Tags>
-                <Links links={this.state.selectedTag ? this.filterLinksByTag() : this.state.links} onLinkClick={this.onLinkClick}></Links>
+                <Tags selectedTag={this.state.selectedTag}
+                    tags={this.state.tags}
+                    onTagClick={this.onTagClick}
+                    onTagSave={this.onTagSave}></Tags>
+                <Links links={this.state.selectedTag ? this.filterLinksByTag() : this.state.links}
+                    onLinkClick={this.onLinkClick}></Links>
             </div >
 
         )
