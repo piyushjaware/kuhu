@@ -1,0 +1,25 @@
+type Tag 
+  @model 
+  @key(fields: ["user","tagName"]) 
+  @auth(rules: [{ allow: owner }, { allow: groups, groups: ["Admins"] }, { allow: private}]) {
+  user: AWSEmail!
+  tagName: String!
+  color: String
+  moreData: AWSJSON
+  createdAt: String
+  updatedAt: String
+}
+
+type Link 
+  @model 
+  @key(fields: ["user", "linkName"]) 
+  @auth(rules: [{ allow: owner }, { allow: groups, groups: ["Admins"] }, { allow: private}]) {
+  user: AWSEmail!
+  linkName: String!
+  tagName: String!
+  url: String!
+  weight: Int
+  moreData: AWSJSON
+  createdAt: String
+  updatedAt: String
+}

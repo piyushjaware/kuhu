@@ -1,0 +1,11 @@
+{
+    "AppSyncApiName": "authSocialProto",
+    "DynamoDBBillingMode": "PAY_PER_REQUEST",
+    "DynamoDBEnableServerSideEncryption": "false",
+    "AuthCognitoUserPoolId": {
+        "Fn::GetAtt": [
+            "authauthsocialproto5f35390a",
+            "Outputs.UserPoolId"
+        ]
+    }
+}
