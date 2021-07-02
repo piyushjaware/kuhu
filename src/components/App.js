@@ -2,7 +2,7 @@ import Button from "./Button";
 import Links from "./Links";
 import Search from "./Search";
 import Header from "./Header";
-import AddLink from "./AddLink";
+import AddLinkPanel from "./AddLinkPanel";
 
 import './app.scss'
 import Tags from "./Tags";
@@ -40,9 +40,17 @@ class App extends Component {
         }))
     }
 
+    onAddLinkBtnClick = () => {
+        this.setState(Object.assign(this.state, { addLink: true }))
+    }
+
     onTagClick = (e, tag) => {
         e.preventDefault();
         console.log("tag", tag)
+        if (tag.tagName === this.state.selectedTag) { // selected tag was clicked. In that case toggle 
+            this.setState(Object.assign(this.state, { selectedTag: '' }))
+            return
+        }
         this.setState(Object.assign(this.state, { selectedTag: tag.tagName }))
     }
 
@@ -51,14 +59,41 @@ class App extends Component {
         window.open(link.url, '_blank').focus();
     }
 
+    onSearchTermChange = (e, searchTerm) => {
+        // e.preventDefault();
+        this.setState(Object.assign(this.state, { searchTerm }))
+    }
+
+    onLinkSave = () => {
+        this.setState(Object.assign(this.state, { addLink: false }))
+    }
+
+    onLinkSaveCancel = () => {
+        this.setState(Object.assign(this.state, { addLink: false }))
+    }
+
+
+    filterLinksBySearchTerm() {
+        return this.state.links.filter(link =>
+            JSON.stringify(link)
+                .toUpperCase()
+                .includes(this.state.searchTerm.toUpperCase()));
+    }
+
+
+    filterLinksByTag() {
+        return this.state.links.filter(link => link.tagName === this.state.selectedTag);
+    }
+
+
     render() {
 
-        console.log("render")
+        console.log("render", this.state)
 
         if (this.state.addLink)
             return (
                 <div className="App" >
-                    <AddLink></AddLink>
+                    <AddLinkPanel onLinkSave={this.onLinkSave} onLinkSaveCancel={this.onLinkSaveCancel}></AddLinkPanel>
                 </div >)
 
         if (this.state.searchTerm)
@@ -68,8 +103,8 @@ class App extends Component {
                         <div className="logo"> Logo</div>
                         <Button label="Add Link" iconClass="plus">/</Button>
                     </Header>
-                    <Search></Search>
-                    <Links links={this.state.links} onLinkClick={this.onLinkClick}></Links>
+                    <Search searchTerm={this.state.searchTerm} onSearchTermChange={this.onSearchTermChange}></Search>
+                    <Links links={this.filterLinksBySearchTerm()} onLinkClick={this.onLinkClick}></Links>
                 </div >
             )
 
@@ -77,11 +112,11 @@ class App extends Component {
             <div className="App" >
                 <Header>
                     <div className="logo"> Logo</div>
-                    <Button label="Add Link" iconClass="plus">/</Button>
+                    <Button label="Add Link" iconClass="plus" onClick={this.onAddLinkBtnClick}>/</Button>
                 </Header>
-                <Search></Search>
+                <Search searchTerm={this.state.searchTerm} onSearchTermChange={this.onSearchTermChange}></Search>
                 <Tags selectedTag={this.state.selectedTag} tags={this.state.tags} onTagClick={this.onTagClick}></Tags>
-                <Links links={this.state.links} onLinkClick={this.onLinkClick}></Links>
+                <Links links={this.state.selectedTag ? this.filterLinksByTag() : this.state.links} onLinkClick={this.onLinkClick}></Links>
             </div >
 
         )
