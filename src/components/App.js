@@ -22,11 +22,11 @@ class App extends Component {
         console.log("App mounting ")
         this.setState(Object.assign(this.state, {
             tags: [
-                // { tagName: "design" },
-                // { tagName: "code" },
-                // { tagName: "work" },
-                // { tagName: "social" },
-                // { tagName: "games" }
+                { tagName: "design" },
+                { tagName: "code" },
+                { tagName: "work" },
+                { tagName: "social" },
+                { tagName: "games" }
             ],
 
             links: [
@@ -47,8 +47,7 @@ class App extends Component {
         this.setState(Object.assign(this.state, { addLink: true }))
     }
 
-    onTagClick = (e, tag) => {
-        e.preventDefault();
+    onTagClick = (tag) => {
         console.log("tag", tag)
         if (tag.tagName === this.state.selectedTag) { // selected tag was clicked. In that case toggle 
             this.setState(Object.assign(this.state, { selectedTag: '' }))
@@ -71,8 +70,11 @@ class App extends Component {
         this.setState(Object.assign(this.state, { tags: [...this.state.tags, tag] }))
     }
 
-    onLinkSave = () => {
+    onLinkSave = (link) => {
         this.setState(Object.assign(this.state, { addLink: false }))
+        if (link) {
+            this.setState(Object.assign(this.state, { links: [...this.state.links, link] }))
+        }
     }
 
     onLinkSaveCancel = () => {
@@ -97,7 +99,12 @@ class App extends Component {
         if (this.state.addLink)
             return (
                 <div className="App" >
-                    <AddLinkPanel onLinkSave={this.onLinkSave} onLinkSaveCancel={this.onLinkSaveCancel}></AddLinkPanel>
+                    <AddLinkPanel
+                        onLinkSave={this.onLinkSave}
+                        onLinkSaveCancel={this.onLinkSaveCancel}
+                        tags={this.state.tags}
+                        onTagSave={this.onTagSave}>
+                    </AddLinkPanel>
                 </div >)
 
         if (this.state.searchTerm)

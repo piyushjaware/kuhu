@@ -11,7 +11,7 @@ let AddTag = ({ onTagSave, noTagsYet }) => {
     }
     const onSaveBtnClick = () => {
         console.log("Saving ", tagName)
-        setTagName(tagName);
+        setTagName(''); //clear local tag
         setInputMode(false);
         onTagSave({ tagName })
     }
