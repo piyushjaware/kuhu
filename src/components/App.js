@@ -6,7 +6,7 @@ import Header from "./Header";
 import AddLinkPanel from "./AddLinkPanel";
 import {reactIsInDevMode} from '../utils/common'
 
-import './app.scss'
+import '../styles/app.scss'
 import Tags from "./Tags";
 import {Component} from "react";
 
@@ -21,10 +21,14 @@ class App extends Component {
     }
 
     async componentDidMount() {
-        // fetch initial data for tags and links
         console.log("App mounting ")
         let data = await this.loadData();
         this.setState(Object.assign(this.state, data))
+    }
+
+    componentWillUnmount() {
+        console.log("App unmounting")
+        this.saveToStorage()
     }
 
     async loadData() {
@@ -84,12 +88,6 @@ class App extends Component {
                 // {linkName: "Eloquent JS", tagName: "code", url: "https://eloquentjavascript.net/index.html", favIconUrl: "", title: "", desc: ""}
             ]
         }
-    }
-
-    componentWillUnmount() {
-        console.log("App unmounting")
-
-        this.saveToStorage()
     }
 
     onAddLinkBtnClick = () => {

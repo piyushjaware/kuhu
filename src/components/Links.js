@@ -1,4 +1,4 @@
-import './links.scss'
+import '../styles/links.scss'
 
 
 const Link = ({links, onLinkClick}) => {

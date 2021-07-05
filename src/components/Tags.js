@@ -1,5 +1,5 @@
 import AddTag from './AddTag'
-import './tags.scss'
+import '../styles/tags.scss'
 
 const Tags = ({selectedTag, tags, onTagClick, onTagSave, allowAddTag = false}) => {
 

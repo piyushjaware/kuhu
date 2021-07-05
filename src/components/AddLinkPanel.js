@@ -1,7 +1,7 @@
 import {useEffect, useState} from "react"
 import Button from "./Button"
 import Tags from "./Tags"
-import "./addLinkPanel.scss"
+import "../styles/addLinkPanel.scss"
 import IconButton from "./IconButton";
 import {reactIsInDevMode} from '../utils/common'
 
