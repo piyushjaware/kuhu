@@ -1,45 +1,46 @@
 .links {
-    display: flex;
-    flex-flow: column nowrap;
+  display: flex;
+  flex-flow: column nowrap;
 
-    margin-top: 10px;
+  margin-top: 10px;
 }
 
 .link-card {
-    background-color: white;
-    border-radius: 20px;
+  background-color: white;
+  border-radius: 20px;
 
-    margin-top: 10px;
+  margin-top: 10px;
+  padding: 15px;
 
-    .content {
-        display: flex;
-        flex-flow: row nowrap;
-        align-items: center;
-        justify-content: space-between;
+  .content {
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: center;
+    justify-content: space-between;
 
-        .text-section {
-            display: flex;
-            flex-flow: column nowrap;
-            flex-basis: 70%;
+    .text-section {
+      display: flex;
+      flex-flow: column nowrap;
+      flex-basis: 70%;
 
-            .title {
-                font-size: 14px;
-            }
+      .title {
+        font-size: 14px;
+      }
 
-            .description {
-                font-size: 12px;
-                color: grey;
-            }
-        }
-
-        .image-section {
-            display: flex;
-            flex-flow: row wrap;
-
-            .image {
-                width: 50px;
-                height: 50px;
-            }
-        }
+      .description {
+        font-size: 12px;
+        color: grey;
+      }
     }
+
+    .image-section {
+      display: flex;
+      flex-flow: row wrap;
+
+      .image {
+        width: 50px;
+        height: 50px;
+      }
+    }
+  }
 }

@@ -1,33 +1,50 @@
-import { useState } from "react";
+import {useState} from "react";
 import Button from "./Button"
+import IconButton from "./IconButton";
 
-let AddTag = ({ onTagSave, noTagsYet }) => {
+let AddTag = ({onTagSave, noTagsYet}) => {
 
     const [tagName, setTagName] = useState('')
     const [inputMode, setInputMode] = useState(false)
+    const [error, setError] = useState('')
 
     const onAddTagClick = () => {
         setInputMode(true);
     }
     const onSaveBtnClick = () => {
-        console.log("Saving ", tagName)
+
+        setError('')// reset error 
+        if (!validateLink()) return
+
+
         setTagName(''); //clear local tag
         setInputMode(false);
-        onTagSave({ tagName })
+        onTagSave({tagName})
     }
 
-    return (
+    const validateLink = () => {
+        if (!tagName) {
+            setError("Tag name missing!")
+            return false
+        }
+        return true
+    }
 
-        <div className="add-tag">
+
+    return (
+        <div className="add-tag tag">
             {inputMode
                 ?
-                <div className="ui action input">
-                    <input type="text" value={tagName} placeholder="eg: work" onChange={(e) => setTagName(e.target.value.toLowerCase())} />
-                    <Button iconClass="add" onClick={e => onSaveBtnClick()} >/</Button>
+                <div className="ui action input small">
+                    <input autoFocus type="text" value={tagName} placeholder="eg: work" onChange={(e) => setTagName(e.target.value.toLowerCase())}/>
+                    {/*<Button iconClass="add" classNames="add-tag-icon-btn" onClick={e => onSaveBtnClick()}>/</Button>*/}
+                    <IconButton iconName="add" classNames="" onClick={e => onSaveBtnClick()}></IconButton>
                 </div>
-                : <Button iconClass="plus" label={noTagsYet ? 'Add Tag' : ''} classNames="mini" onClick={e => onAddTagClick(e)}>/</Button>
+                : <Button label="Create Tag" classNames="add-tag-btn mini" onClick={e => onAddTagClick(e)}>/</Button>
             }
+            <div className="error">{error}</div>
         </div>
     )
 }
+
 export default AddTag

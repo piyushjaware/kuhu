@@ -1,16 +1,34 @@
 .tags {
-    display: flex;
-    flex-flow: row wrap;
+  display: flex;
+  flex-flow: row wrap;
 
+  margin-top: 5px;
+
+  .tag {
+    margin-right: 10px;
     margin-top: 10px;
+  }
 
-    .tag {
-        margin-right: 10px;
-    }
+  .k-label {
+    background-color: white;
+    border-radius: 10px;
+    padding: 7px 14px;
+  }
 
-    .selected{
-        color: white;
-        background-color: black;
-    }
+  .selected {
+    color: white;
+    background-color: black;
+  }
+
+
+  .add-tag-btn {
+    //border: 1px solid red;
+    border-radius: 10px;
+    line-height: .8em;
+    /* border: 1px solid #ee5252; */
+    background-color: #ffffff;
+  }
 
 }
+
+

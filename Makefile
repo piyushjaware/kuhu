@@ -17,4 +17,4 @@ build-npm:
 
 
 build-ext: build-npm move-to-dist
-	echo "\n Done! Files exported to /Users/jaware/dev/x-apps/browser-extensions/kuhu/dist for extension"
+	echo "\n Done! Files exported to /chrome-extension"

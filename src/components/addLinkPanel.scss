@@ -1,0 +1,44 @@
+@import "./global.scss";
+
+.add-link-panel {
+
+  background-color: white;
+  border-radius: 10px;
+  padding: 20px;
+  margin-top: 20px;
+
+  .title {
+    font-size: 20px;
+    padding: 15px 0px;
+  }
+
+  .form {
+    margin-top: 20px;
+
+    .field {
+      margin-bottom: 20px;
+    }
+  }
+
+
+  .url {
+    color: $text-light;
+  }
+
+  .tags {
+    margin-top: -5px;
+    margin-bottom: 20px;
+
+    .k-label {
+      background-color: $light-gray-bg;
+      color: $text-dark;
+    }
+
+    .selected {
+      color: white;
+      background-color: black;
+    }
+  }
+
+
+}

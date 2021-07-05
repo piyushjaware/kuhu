@@ -1,9 +1,9 @@
-let Button = ({ iconClass, label, onClick, classNames}) => {
+let Button = ({label, onClick, classNames}) => {
     return (
-        <button className={`ui icon  ${label ? 'labeled' : ''} button ${classNames}`} onClick={() => onClick()}>
-            {iconClass && <i className={`${iconClass} icon`}></i>}
+        <button className={`ui button ${classNames}`} onClick={() => onClick()}>
             {label}
         </button>
+
     )
 }
 export default Button
