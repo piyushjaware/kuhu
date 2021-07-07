@@ -38,4 +38,3 @@ amplify-gradle-config.json
 amplifyxc.config
 /.idea/
 /chrome-extension
-/chrome-extension/static/
