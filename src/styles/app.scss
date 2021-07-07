@@ -1,4 +1,51 @@
+@import "src/styles/global";
+
+
 .app {
   padding: 15px;
+  font-size: 12px;
+  font-family: "Airbnb Cereal App";
+  color: $text-dark;
+
+  a {
+    color: $accent;
+  }
+
+  button.k-btn-dark {
+    background-color: $primary-color;
+    color: white;
+    border-radius: $border-radius-one-line;
+
+    &:hover {
+      background-color: $text-light;
+      color: white;
+    }
+  }
+
+  button.icon {
+    background-color: $bg-light;
+    color: $primary-color;
+  }
+
+  input.k-input {
+    border: 1px solid $bg-light;
+    background-color: $bg-light;
+    border-radius: $border-radius-one-line;
+    min-height: 30px;
+    color: $primary-color;
+    font-size: 14px;
+
+    &:focus {
+      background-color: white;
+      border: 1px solid lighten($primary-color, 30%);
+    }
+  }
+
+  .mbt10 {
+    margin: 10px 0px;
+  }
+
+
 }
+
 

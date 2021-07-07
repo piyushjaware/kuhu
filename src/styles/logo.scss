@@ -1,0 +1,16 @@
+@import "src/styles/global";
+
+.logo {
+  display: flex;
+  align-items: center;
+
+  .logo-txt {
+    padding: 0px 10px;
+  }
+
+  .logo-img {
+    height: 32px;
+
+  }
+}
+

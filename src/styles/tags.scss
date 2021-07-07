@@ -1,3 +1,5 @@
+@import "src/styles/global";
+
 .tags {
   display: flex;
   flex-flow: row wrap;
@@ -11,22 +13,29 @@
 
   .k-label {
     background-color: white;
-    border-radius: 10px;
+    border-radius: $border-radius-one-line;
     padding: 7px 14px;
+    color: $text-dark;
+    font-weight: normal;
+    border: 1px solid $accent;
   }
 
   .selected {
     color: white;
-    background-color: black;
+    background-color: $accent;
   }
 
 
   .add-tag-btn {
-    //border: 1px solid red;
-    border-radius: 10px;
+    border-radius: $border-radius-one-line;
     line-height: .8em;
-    /* border: 1px solid #ee5252; */
     background-color: #ffffff;
+    color: $accent;
+
+    &:hover {
+      background-color: $bg-light;
+      color: $primary-color;
+    }
   }
 
 }

@@ -9,6 +9,7 @@ import {reactIsInDevMode} from '../utils/common'
 import '../styles/app.scss'
 import Tags from "./Tags";
 import {Component} from "react";
+import Logo from "./Logo";
 
 class App extends Component {
 
@@ -75,14 +76,14 @@ class App extends Component {
         return {
             tags: [
                 // {tagName: "design"},
-                // {tagName: "code"},
-                // {tagName: "social"¬  },
+                {tagName: "code"},
+                {tagName: "social"},
                 // {tagName: "games"}
             ],
 
             links: [
-                // {linkName: "Dribble", tagName: "design", url: "https://dribbble.com/", favIconUrl: "https://www.google.com/favicon.ico", desc: "some desc"},
-                // {linkName: "Color wheel", tagName: "design", url: "https://www.canva.com/colors/color-wheel/", favIconUrl: "https://www.google.com/favicon.ico", desc: "some desc"},
+                {linkName: "Dribble", tagName: "design", url: "https://dribbble.com/", favIconUrl: "https://www.google.com/favicon.ico", desc: "some desc"},
+                {linkName: "Color wheel", tagName: "design", url: "https://www.canva.com/colors/color-wheel/", favIconUrl: "https://www.google.com/favicon.ico", desc: "some desc"},
                 // {linkName: "Freepik", tagName: "design", url: "https://www.freepik.com/", favIconUrl: "", title: "", desc: ""},
                 // {linkName: "Gradient Generator", tagName: "design", url: "https://cssgradient.io/", favIconUrl: "", title: "", desc: ""},
                 // {linkName: "Eloquent JS", tagName: "code", url: "https://eloquentjavascript.net/index.html", favIconUrl: "", title: "", desc: ""}
@@ -167,7 +168,7 @@ class App extends Component {
             return (
                 <div className="app">
                     <Header>
-                        <div className="logo"> Logo</div>
+                        <Logo></Logo>
                     </Header>
                     <AddLinkPanel
                         onLinkSave={this.onLinkSave}
@@ -181,8 +182,8 @@ class App extends Component {
             return (
                 <div className="app">
                     <Header>
-                        <div className="logo"> Logo</div>
-                        <Button label="Add Link" iconClass="plus">/</Button>
+                        <Logo></Logo>
+                        <Button label="Add Link" classNames="k-btn-dark small">/</Button>
                     </Header>
                     <Search searchTerm={this.state.searchTerm} onSearchTermChange={this.onSearchTermChange}></Search>
                     <Links links={this.filterLinksBySearchTerm()} onLinkClick={this.onLinkClick}></Links>
@@ -192,8 +193,8 @@ class App extends Component {
         return (
             <div className="app">
                 <Header>
-                    <div className="logo"> Logo</div>
-                    <Button label="Add Link" iconClass="plus" onClick={this.onAddLinkBtnClick}>/</Button>
+                    <Logo></Logo>
+                    <Button label="Add Link" classNames="small k-btn-dark" onClick={this.onAddLinkBtnClick}>/</Button>
                 </Header>
                 <Search searchTerm={this.state.searchTerm} onSearchTermChange={this.onSearchTermChange}></Search>
                 <Tags selectedTag={this.state.selectedTag}

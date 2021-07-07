@@ -3,9 +3,10 @@
 .add-link-panel {
 
   background-color: white;
-  border-radius: 10px;
+  border-radius: $border-radius-two-line;
   padding: 20px;
   margin-top: 20px;
+  border: 1px solid $text-light;
 
   .title {
     font-size: 20px;
@@ -15,8 +16,17 @@
   .form {
     margin-top: 20px;
 
-    .field {
-      margin-bottom: 20px;
+    .k-field {
+      margin: 20px 0px;
+      display: flex;
+      flex-flow: column nowrap;
+      overflow-wrap: break-word;// stop overflow for big single strings
+
+      label {
+        margin-bottom: 2px;
+        font-weight: 500;
+      }
+
     }
   }
 
@@ -28,16 +38,6 @@
   .tags {
     margin-top: -5px;
     margin-bottom: 20px;
-
-    .k-label {
-      background-color: $light-gray-bg;
-      color: $text-dark;
-    }
-
-    .selected {
-      color: white;
-      background-color: black;
-    }
   }
 
 

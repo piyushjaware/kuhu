@@ -16,7 +16,7 @@ let AddLinkPanel = ({onLinkSave, onLinkSaveCancel, tags, onTagSave}) => {
     useEffect(() => {
         async function getCurrentTab() {
             if (reactIsInDevMode()) {
-                return {url: "https://www.google.com", favIconUrl: "https://www.google.com/favicon.ico", title: "Google"}
+                return {url: "https://www.google.com", favIconUrl: "https://semantic-ui.com/images/logo.png", title: "Google"}
             }
             let queryOptions = {active: true, currentWindow: true};
             // eslint-disable-next-line no-undef
@@ -65,15 +65,17 @@ let AddLinkPanel = ({onLinkSave, onLinkSaveCancel, tags, onTagSave}) => {
             <div className="title">Save Link
                 <IconButton iconName="close icon" classNames="circular tiny right floated" onClick={onLinkSaveCancel}></IconButton>
             </div>
-            <div className="ui form">
-                <div className="field">
+            <div className="form">
+                <div className="k-field">
                     <div className="url">{tab.url}</div>
                 </div>
-                <div className="field mb20">
+                <div className="k-field mb20">
                     <label>Name</label>
-                    <input autoFocus type="text" value={name} onChange={(e) => setName(e.target.value)}/>
+                    <div className="ui small icon input">
+                        <input autoFocus className="k-input" type="text" value={name} onChange={(e) => setName(e.target.value)}/>
+                    </div>
                 </div>
-                <div className="field mb20">
+                <div className="k-field mb20">
                     <label>Choose Tag</label>
                     <Tags selectedTag={chosenTag.tagName}
                           tags={tags}
@@ -83,7 +85,7 @@ let AddLinkPanel = ({onLinkSave, onLinkSaveCancel, tags, onTagSave}) => {
                 </div>
             </div>
             <div className="error">{error}</div>
-            <Button label="Save Link" classNames="fluid" onClick={onSave}>/</Button>
+            <Button label="Save Link" classNames="fluid k-btn-dark" onClick={onSave}>/</Button>
 
         </div>
     )

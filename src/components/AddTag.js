@@ -40,7 +40,7 @@ let AddTag = ({onTagSave, noTagsYet}) => {
                     {/*<Button iconClass="add" classNames="add-tag-icon-btn" onClick={e => onSaveBtnClick()}>/</Button>*/}
                     <IconButton iconName="add" classNames="" onClick={e => onSaveBtnClick()}></IconButton>
                 </div>
-                : <Button label="Create Tag" classNames="add-tag-btn mini" onClick={e => onAddTagClick(e)}>/</Button>
+                : <Button label="Create Tag" classNames="add-tag-btn small" onClick={e => onAddTagClick(e)}>/</Button>
             }
             <div className="error">{error}</div>
         </div>
