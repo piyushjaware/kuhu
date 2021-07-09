@@ -16,5 +16,5 @@ build-npm:
 	npm run build
 
 
-build-ext: build-npm move-to-dist
+build: build-npm move-to-dist
 	echo "\n Done! Files exported to /chrome-extension"

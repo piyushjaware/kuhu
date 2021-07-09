@@ -29,7 +29,7 @@ class App extends Component {
 
     componentWillUnmount() {
         console.log("App unmounting")
-        this.saveToStorage()
+        // this.saveToStorage() this does not work as pop closes before componentWillUnmount is called
     }
 
     async loadData() {
@@ -52,19 +52,23 @@ class App extends Component {
         }
         return new Promise((resolve, reject) => {
             chrome.storage.sync.get([key], function (result) {
-                console.log('Value currently is ' + JSON.stringify(result[key]));
-                resolve(result[key]);
+                console.log('Value currently is ' + result[key]);
+                if (result[key]) {
+                    resolve(result[key]);
+                } else {
+                    resolve('');
+                }
+
             });
         })
     }
 
-    saveToStorage() {
+    saveToStorage(state) {
         if (reactIsInDevMode()) {
             console.log('React is in dev mode. Skipping saveToStorage')
             return;
         }
-        let dataTostore = Object.assign(this.state);
-        chrome.storage.sync.set({state: dataTostore}, function () {
+        chrome.storage.sync.set({state: state}, function () {
             if (chrome.runtime.error) {
                 console.log("Runtime error while saving data.");
             }
@@ -82,7 +86,13 @@ class App extends Component {
             ],
 
             links: [
-                {linkName: "Dribble", tagName: "design", url: "https://dribbble.com/", favIconUrl: "https://www.google.com/favicon.ico", desc: "some desc"},
+                {
+                    linkName: "Dribble",
+                    tagName: "design",
+                    url: "https://dribbble.com/",
+                    favIconUrl: "https://www.google.com/favicon.ico",
+                    desc: "some desc bjgj sbdjsbd msabdjsabjdbsajjkdbsa dmnsadgjsa dsamdbjksabd bjsbdj jjgj jkjkjk hjhjkk jhjkjk jhjkhjkh bjbjkbd sadjsdjksbjdgu jgjg"
+                },
                 {linkName: "Color wheel", tagName: "design", url: "https://www.canva.com/colors/color-wheel/", favIconUrl: "https://www.google.com/favicon.ico", desc: "some desc"},
                 // {linkName: "Freepik", tagName: "design", url: "https://www.freepik.com/", favIconUrl: "", title: "", desc: ""},
                 // {linkName: "Gradient Generator", tagName: "design", url: "https://cssgradient.io/", favIconUrl: "", title: "", desc: ""},
@@ -99,8 +109,6 @@ class App extends Component {
 
     onTagClick = (tag) => {
         this.toggleTagSelection(tag);
-        // todo remove this
-        this.saveToStorage()
     }
 
     onLinkClick = (e, link) => {
@@ -115,14 +123,20 @@ class App extends Component {
 
     onTagSave = (tag) => {
         // save tag and update state
-        this.setState(Object.assign(this.state, {tags: [...this.state.tags, tag]}))
+        if (tag) {
+            let newState = Object.assign(this.state, {tags: [...this.state.tags, tag]});
+            this.saveToStorage(newState)
+            this.setState(newState)
+        }
     }
 
     onLinkSave = (link) => {
         // close add link panel, save link and update state
         this.closeAddLinkPanel()
         if (link) {
-            this.setState(Object.assign(this.state, {links: [...this.state.links, link]}))
+            let newState = Object.assign(this.state, {links: [...this.state.links, link]});
+            this.saveToStorage(newState) // save to storage after any save event
+            this.setState(newState)
         }
     }
 

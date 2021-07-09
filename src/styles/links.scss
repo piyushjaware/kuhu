@@ -9,13 +9,16 @@
 
 .link-card {
   background-color: $bg-light;
+  border: 1px solid $bg-light;
   border-radius: $border-radius-two-line;
   margin-top: 20px;
   padding: 15px;
 
+  animation: slide-up 0.4s $easing;
+
   &:hover {
-    background-color: darken($bg-light, 5%);
-    //box-shadow: 0 0 10px $bg-light;
+    border: 1px solid $primary-color;
+    background-color: white;
   }
 
   .content {

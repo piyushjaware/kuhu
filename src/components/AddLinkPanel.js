@@ -43,15 +43,15 @@ let AddLinkPanel = ({onLinkSave, onLinkSaveCancel, tags, onTagSave}) => {
 
     const validateLink = () => {
         if (!tab.url) {
-            setError("There was some problem with extrcting the current url from the browser tab.")
+            setError("There was some problem with extracting the current url from the browser tab.")
             return false
         }
         if (!name) {
-            setError("Please provide a name to the link?")
+            setError("Please provide a name to the link.")
             return false
         }
         if (!chosenTag.tagName) {
-            setError("Please provide a tag for the link.")
+            setError("Please choose a tag for the link.")
             return false
         }
         return true
@@ -62,8 +62,9 @@ let AddLinkPanel = ({onLinkSave, onLinkSaveCancel, tags, onTagSave}) => {
     return (
         <div className="add-link-panel">
 
-            <div className="title">Save Link
-                <IconButton iconName="close icon" classNames="circular tiny right floated" onClick={onLinkSaveCancel}></IconButton>
+            <div className="title-row">
+                <p className="title">Save Link</p>
+                <IconButton iconName="close icon" classNames="circular tiny" onClick={onLinkSaveCancel}></IconButton>
             </div>
             <div className="form">
                 <div className="k-field">

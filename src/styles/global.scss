@@ -2,7 +2,7 @@
 
 
 // ----------- colors ------------//
-$text-light: #bbb5cc;
+$text-light: #a79ccd;
 $text-dark: #57419d;
 $primary-color: #57419d;
 $bg-light: #f7f6fd;
@@ -10,6 +10,35 @@ $accent: #fb8f99;
 
 
 // ----------- colors ------------//
-$border-radius-one-line: 10px;
-$border-radius-two-line: 15px;
-$border-radius-multi-line: 20px;
+$border-radius-one-line: 7px;
+$border-radius-one-line-extra: 10px;
+$border-radius-two-line: 14px;
+$border-radius-multi-line: 21px;
+
+
+// -------------- Animation ------------------//
+
+$easing: cubic-bezier(0.22, 1, 0.36, 1);
+
+
+@keyframes slide-up {
+  0% {
+    transform: translateY(150px);
+    opacity: 0.5;
+  }
+  100% {
+    transform: translateY(0px);
+    opacity: 1;
+  }
+}
+
+@-webkit-keyframes slide-up {
+  0% {
+    transform: translateY(150px);
+    opacity: 0.5;
+  }
+  100% {
+    transform: translateY(0px);
+    opacity: 1;
+  }
+} 

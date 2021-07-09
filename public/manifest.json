@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "kuhu",
   "description": "Bookmarks made easy!",
-  "version": "0.1.0",
+  "version": "0.0.0.1",
   "permissions": [
     "tabs",
     "storage"
@@ -12,8 +12,8 @@
   ],
   "action": {
     "default_icon": {
-      "16": "icon16.png",
-      "24": "icon24.png",
+      "16": "icon32.png",
+      "24": "icon32.png",
       "32": "icon32.png"
     },
     "default_title": "Kuhu! Bookmarks made easy!",

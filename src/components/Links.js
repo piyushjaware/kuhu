@@ -1,4 +1,5 @@
 import '../styles/links.scss'
+import TruncatedText from "./TruncatedText";
 
 
 const Link = ({links, onLinkClick}) => {
@@ -10,10 +11,10 @@ const Link = ({links, onLinkClick}) => {
             <div className="content">
                 <div className="text-section">
                     <div className="title">
-                        {link.linkName}
+                        <TruncatedText len={55}>{link.linkName}</TruncatedText>
                     </div>
                     <div className="description">
-                        {link.desc}
+                        <TruncatedText len={55}>{link.linkName}</TruncatedText>
                     </div>
                 </div>
                 <div className="image-section">
