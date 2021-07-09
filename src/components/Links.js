@@ -14,7 +14,7 @@ const Link = ({links, onLinkClick}) => {
                         <TruncatedText len={55}>{link.linkName}</TruncatedText>
                     </div>
                     <div className="description">
-                        <TruncatedText len={55}>{link.linkName}</TruncatedText>
+                        <TruncatedText len={55}>{link.desc}</TruncatedText>
                     </div>
                 </div>
                 <div className="image-section">

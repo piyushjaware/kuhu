@@ -38,9 +38,9 @@ let AddTag = ({onTagSave, noTagsYet}) => {
                 <div className="ui action input tiny">
                     <input autoFocus type="text" value={tagName} placeholder="eg: work" onChange={(e) => setTagName(e.target.value.toLowerCase())}/>
                     {/*<Button iconClass="add" classNames="add-tag-icon-btn" onClick={e => onSaveBtnClick()}>/</Button>*/}
-                    <IconButton iconName="add" classNames="tiny" onClick={e => onSaveBtnClick()}></IconButton>
+                    <IconButton iconName="save" classNames="" onClick={e => onSaveBtnClick()}></IconButton>
                 </div>
-                : <Button label="Create Tag" classNames="add-tag-btn tiny" onClick={e => onAddTagClick(e)}>/</Button>
+                : <Button label="Create Tag" classNames="mini k-btn-dark hollow" onClick={e => onAddTagClick(e)}>/</Button>
             }
             <div className="error">{error}</div>
         </div>

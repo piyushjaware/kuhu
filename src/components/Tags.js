@@ -1,7 +1,6 @@
-import AddTag from './AddTag'
 import '../styles/tags.scss'
 
-const Tags = ({selectedTag, tags, onTagClick, onTagSave, allowAddTag = false}) => {
+const Tags = ({selectedTag, tags, onTagClick}) => {
 
     const tagElements = tags.map(tag =>
         <a role="button" className="tag" href="/" onClick={(e) => {
@@ -12,13 +11,9 @@ const Tags = ({selectedTag, tags, onTagClick, onTagSave, allowAddTag = false}) =
         </a>
     )
 
-    console.log('selectedTag', selectedTag)
-
     return (
-
         <div className="tags">
             {tagElements}
-            {allowAddTag && <AddTag onTagSave={onTagSave} noTagsYet={!tags.length}></AddTag>}
         </div>
     )
 }

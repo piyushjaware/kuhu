@@ -4,6 +4,7 @@ import Tags from "./Tags"
 import "../styles/addLinkPanel.scss"
 import IconButton from "./IconButton";
 import {reactIsInDevMode} from '../utils/common'
+import AddTag from "./AddTag";
 
 let AddLinkPanel = ({onLinkSave, onLinkSaveCancel, tags, onTagSave}) => {
 
@@ -83,6 +84,7 @@ let AddLinkPanel = ({onLinkSave, onLinkSaveCancel, tags, onTagSave}) => {
                           onTagClick={setChosenTag}
                           onTagSave={onTagSave}
                           allowAddTag={true}></Tags>
+                    <AddTag onTagSave={onTagSave} noTagsYet={!tags.length}></AddTag>
                 </div>
             </div>
             <div className="error">{error}</div>
