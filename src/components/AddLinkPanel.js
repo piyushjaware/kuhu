@@ -5,12 +5,15 @@ import "../styles/addLinkPanel.scss"
 import IconButton from "./IconButton";
 import {reactIsInDevMode} from '../utils/common'
 import AddTag from "./AddTag";
+import Error from "./Error";
+import React from 'react'
+
 
 let AddLinkPanel = ({onLinkSave, onLinkSaveCancel, tags, onTagSave}) => {
 
     const [chosenTag, setChosenTag] = useState({tagName: ''})
     const [name, setName] = useState('')
-    const [error, setError] = useState('')
+    const [errors, setErrors] = useState([])
     const [tab, setTab] = useState({})
 
 
@@ -36,29 +39,48 @@ let AddLinkPanel = ({onLinkSave, onLinkSaveCancel, tags, onTagSave}) => {
 
 
     const onSave = () => {
-        setError('')// reset error 
-        if (!validateLink()) return
+        // setErrors('')// reset errors 
+        if (!validateForm())
+            return
         const linkToSave = {linkName: name, url: tab.url, tagName: chosenTag.tagName, favIconUrl: tab.favIconUrl, desc: tab.desc}
         onLinkSave(linkToSave)
     }
 
-    const validateLink = () => {
+    const validateForm = () => {
+        let validationSuccess = true;
+        let validationErrors = [];
         if (!tab.url) {
-            setError("There was some problem with extracting the current url from the browser tab.")
-            return false
+            validationErrors.push({
+                type: 'field',
+                name: 'url',
+                msg: 'There was some problem with extracting the current url from the browser tab.'
+            })
+            validationSuccess = false;
         }
         if (!name) {
-            setError("Please provide a name to the link.")
-            return false
+            validationErrors.push({
+                type: 'field',
+                name: 'name',
+                msg: <React.Fragment>Please provide a <b>name</b> to the link.</React.Fragment>
+            })
+            validationSuccess = false;
         }
         if (!chosenTag.tagName) {
-            setError("Please choose a tag for the link.")
-            return false
+            validationErrors.push({
+                type: 'field',
+                name: 'tagName',
+                msg: <React.Fragment>Please choose a <b>tag</b> for the link.</React.Fragment>
+            })
+            validationSuccess = false;
         }
-        return true
+        if (!validationSuccess) {
+            setErrors([...validationErrors])
+        }
+
+        return validationSuccess
     }
 
-    console.log(chosenTag, tab, name, error)
+    console.log(chosenTag, tab, name, errors)
 
     return (
         <div className="add-link-panel">
@@ -76,6 +98,7 @@ let AddLinkPanel = ({onLinkSave, onLinkSaveCancel, tags, onTagSave}) => {
                     <div className="ui small icon input">
                         <input autoFocus className="k-input" type="text" value={name} onChange={(e) => setName(e.target.value)}/>
                     </div>
+                    <Error errors={errors} name="name"></Error>
                 </div>
                 <div className="k-field mb20">
                     <label>Choose Tag</label>
@@ -84,10 +107,10 @@ let AddLinkPanel = ({onLinkSave, onLinkSaveCancel, tags, onTagSave}) => {
                           onTagClick={setChosenTag}
                           onTagSave={onTagSave}
                           allowAddTag={true}></Tags>
+                    <Error errors={errors} name="tagName"></Error>
                     <AddTag onTagSave={onTagSave} noTagsYet={!tags.length}></AddTag>
                 </div>
             </div>
-            <div className="error">{error}</div>
             <Button label="Save Link" classNames="fluid k-btn-dark" onClick={onSave}>/</Button>
 
         </div>

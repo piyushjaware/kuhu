@@ -25,9 +25,10 @@ const Link = ({links, onLinkClick}) => {
         </a>
     )
 
+
     return (
         <div className="links">
-            {linksElemennts}
+            {linksElemennts.length ? linksElemennts : <div className="no-links-found">no-links-found-graphic</div>}
         </div>
     )
 }

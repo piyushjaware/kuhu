@@ -7,9 +7,12 @@
   font-family: "Airbnb Cereal App";
   color: $text-dark;
 
+
+  //--------------Basic elements styles override -----------------// 
   a {
     color: $accent;
   }
+
 
   button.k-btn-dark {
     background-color: $primary-color;
@@ -17,8 +20,8 @@
     border-radius: $border-radius-one-line;
 
     &.hollow {
-      background-color: white; 
-      //border: 1px solid lighten($primary-color, 20%);
+      background-color: white;
+      border: 1px solid lighten($primary-color, 20%);
       color: $primary-color;
     }
 
@@ -33,6 +36,7 @@
     background-color: $bg-light;
     color: $primary-color;
   }
+
 
   input.k-input {
     border: 1px solid $bg-light;
@@ -51,7 +55,6 @@
   .mbt10 {
     margin: 10px 0px;
   }
-
 
 }
 

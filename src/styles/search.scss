@@ -2,6 +2,10 @@
 
 .search-field {
 
+  //stick to the top when scrolling
+  position: sticky;
+  top: 10px;
+
   .icon {
     color: $primary-color;
   }

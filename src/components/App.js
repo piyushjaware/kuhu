@@ -10,6 +10,7 @@ import '../styles/app.scss'
 import Tags from "./Tags";
 import {Component} from "react";
 import Logo from "./Logo";
+import OnboardingGraphic from "./OnboardingGraphic";
 
 class App extends Component {
 
@@ -17,6 +18,7 @@ class App extends Component {
         addLink: false,
         selectedTag: '',
         searchTerm: '',
+        showOnboarding: true,
         tags: [],
         links: []
     }
@@ -36,11 +38,10 @@ class App extends Component {
         let data = await this.readFromStorage('state')
         console.log("readFromStorage result", data)
 
-        if (data) {
-            return data
+        if (reactIsInDevMode()) {
+            data = await this.fetchDummyData()
+            console.log("fetchDummyData", data)
         }
-        data = await this.fetchDataFromApi()
-        console.log("fetchDataFromApi", data)
         return data
     }
 
@@ -76,29 +77,38 @@ class App extends Component {
         });
     }
 
-    async fetchDataFromApi() {
+    async fetchDummyData() {
         return {
             tags: [
-                {tagName: "design"},
-                {tagName: "code"},
-                {tagName: "social"},
-                {tagName: "games"}
+                // {tagName: "design"},
+                // {tagName: "code"},
+                // {tagName: "social"},
+                // {tagName: "games"}
             ],
 
             links: [
-                {
-                    linkName: "Dribble",
-                    tagName: "design",
-                    url: "https://dribbble.com/",
-                    favIconUrl: "https://www.google.com/favicon.ico",
-                    desc: "some desc bjgj sbdjsbd msabdjsabjdbsajjkdbsa dmnsadgjsa dsamdbjksabd bjsbdj jjgj jkjkjk hjhjkk jhjkjk jhjkhjkh bjbjkbd sadjsdjksbjdgu jgjg"
-                },
-                {linkName: "Color wheel", tagName: "design", url: "https://www.canva.com/colors/color-wheel/", favIconUrl: "https://www.google.com/favicon.ico", desc: "some desc"},
-                {linkName: "Freepik", tagName: "design", url: "https://www.freepik.com/", favIconUrl: "", title: "", desc: ""},
-                {linkName: "Gradient Generator", tagName: "design", url: "https://cssgradient.io/", favIconUrl: "", title: "", desc: ""},
-                {linkName: "Eloquent JS", tagName: "code", url: "https://eloquentjavascript.net/index.html", favIconUrl: "", title: "", desc: ""}
+                // {
+                //     linkName: "Dribble",
+                //     tagName: "design",
+                //     url: "https://dribbble.com/",
+                //     favIconUrl: "https://www.google.com/favicon.ico",
+                //     desc: "some desc bjgj sbdjsbd msabdjsabjdbsajjkdbsa dmnsadgjsa dsamdbjksabd bjsbdj jjgj jkjkjk hjhjkk jhjkjk jhjkhjkh bjbjkbd sadjsdjksbjdgu jgjg"
+                // },
+                // {linkName: "Color wheel", tagName: "design", url: "https://www.canva.com/colors/color-wheel/", favIconUrl: "https://www.google.com/favicon.ico", desc: "some desc"},
+                // {linkName: "Freepik", tagName: "design", url: "https://www.freepik.com/", favIconUrl: "", title: "", desc: ""},
+                // {linkName: "Gradient Generator", tagName: "design", url: "https://cssgradient.io/", favIconUrl: "", title: "", desc: ""},
+                // {linkName: "Gradient Generator", tagName: "design", url: "https://cssgradient.io/", favIconUrl: "", title: "", desc: ""},
+                // {linkName: "Gradient Generator", tagName: "design", url: "https://cssgradient.io/", favIconUrl: "", title: "", desc: ""},
+                // {linkName: "Gradient Generator", tagName: "design", url: "https://cssgradient.io/", favIconUrl: "", title: "", desc: ""},
+                // {linkName: "Eloquent JS", tagName: "code", url: "https://eloquentjavascript.net/index.html", favIconUrl: "", title: "", desc: ""}
             ]
         }
+    }
+
+    completeOnboarding = () => {
+        let newState = Object.assign(this.state, {showOnboarding: false});
+        this.saveToStorage(newState);
+        this.setState(newState);
     }
 
     onAddLinkBtnClick = () => {
@@ -178,6 +188,8 @@ class App extends Component {
     render() {
         console.log("render", Object.assign(this.state))
 
+        const noDataYet = this.state.tags.length == 0 && this.state.links.length == 0
+
         if (this.state.addLink)
             return (
                 <div className="app">
@@ -202,6 +214,11 @@ class App extends Component {
                     <Search searchTerm={this.state.searchTerm} onSearchTermChange={this.onSearchTermChange}></Search>
                     <Links links={this.filterLinksBySearchTerm()} onLinkClick={this.onLinkClick}></Links>
                 </div>
+            )
+
+        if (noDataYet && this.state.showOnboarding)
+            return (
+                <OnboardingGraphic onComplete={this.completeOnboarding}></OnboardingGraphic>
             )
 
         return (
