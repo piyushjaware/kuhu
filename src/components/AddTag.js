@@ -1,6 +1,7 @@
 import {useState} from "react";
 import Button from "./Button"
 import IconButton from "./IconButton";
+import "../styles/add-tag.scss"
 
 let AddTag = ({onTagSave, noTagsYet}) => {
 
@@ -39,6 +40,7 @@ let AddTag = ({onTagSave, noTagsYet}) => {
                     <input autoFocus type="text" value={tagName} placeholder="eg: work" onChange={(e) => setTagName(e.target.value.toLowerCase())}/>
                     {/*<Button iconClass="add" classNames="add-tag-icon-btn" onClick={e => onSaveBtnClick()}>/</Button>*/}
                     <IconButton iconName="save" classNames="" onClick={e => onSaveBtnClick()}></IconButton>
+                    <IconButton iconName="cancel" onClick={e => setInputMode(false)}></IconButton>
                 </div>
                 : <Button label="Create Tag" classNames="mini k-btn-dark hollow" onClick={e => onAddTagClick(e)}>/</Button>
             }

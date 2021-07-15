@@ -86,7 +86,7 @@ let AddLinkPanel = ({onLinkSave, onLinkSaveCancel, tags, onTagSave}) => {
         <div className="add-link-panel">
 
             <div className="title-row">
-                <p className="title">Save Link</p>
+                <p className="title">Save Current Page</p>
                 <IconButton iconName="close icon" classNames="circular tiny" onClick={onLinkSaveCancel}></IconButton>
             </div>
             <div className="form">

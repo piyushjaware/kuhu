@@ -20,11 +20,12 @@ let OnboardingGraphic = ({onComplete}) => {
     return (
         <div className="onboarding-graphic">
             <div className={`screen screen${currentScreen} ${currentScreen > 1 ? 'animate-slide' : ''}`} key={shortId.generate()}>
-                {currentScreen === finalScreen
-                    ? <Button classNames="next-btn mini go" label="Go!" onClick={onNextClick}/>
-                    : <Button classNames="next-btn mini" label="Next" onClick={onNextClick}/>
-                }
-
+                <div className="buttons">
+                    {currentScreen === finalScreen
+                        ? <Button classNames="next-btn mini go" label="Go!" onClick={onNextClick}/>
+                        : <Button classNames="next-btn mini hollow" label="Next" onClick={onNextClick}/>
+                    }
+                </div>
             </div>
         </div>
 

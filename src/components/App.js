@@ -4,7 +4,7 @@ import Links from "./Links";
 import Search from "./Search";
 import Header from "./Header";
 import AddLinkPanel from "./AddLinkPanel";
-import {reactIsInDevMode} from '../utils/common'
+import {reactIsInDevMode, LocalStorage} from '../utils/common'
 
 import '../styles/app.scss'
 import Tags from "./Tags";
@@ -12,16 +12,19 @@ import {Component} from "react";
 import Logo from "./Logo";
 import OnboardingGraphic from "./OnboardingGraphic";
 
+
 class App extends Component {
 
     state = {
         addLink: false,
         selectedTag: '',
         searchTerm: '',
-        showOnboarding: true,
+        onboardingComplete: false,
         tags: [],
         links: []
     }
+
+    localStorage = new LocalStorage()
 
     async componentDidMount() {
         console.log("App mounting ")
@@ -31,12 +34,12 @@ class App extends Component {
 
     componentWillUnmount() {
         console.log("App unmounting")
-        // this.saveToStorage() this does not work as pop closes before componentWillUnmount is called
     }
 
     async loadData() {
-        let data = await this.readFromStorage('state')
-        console.log("readFromStorage result", data)
+
+        let data = await this.localStorage.read('state')
+        console.log("localStorage.read result", data)
 
         if (reactIsInDevMode()) {
             data = await this.fetchDummyData()
@@ -46,56 +49,25 @@ class App extends Component {
     }
 
 
-    readFromStorage(key) {
-        if (reactIsInDevMode()) {
-            console.log('React is in dev mode. Skipping readFromStorage')
-            return Promise.resolve('')
-        }
-        return new Promise((resolve, reject) => {
-            chrome.storage.sync.get([key], function (result) {
-                console.log('Value currently is ' + result[key]);
-                if (result[key]) {
-                    resolve(result[key]);
-                } else {
-                    resolve('');
-                }
-
-            });
-        })
-    }
-
-    saveToStorage(state) {
-        if (reactIsInDevMode()) {
-            console.log('React is in dev mode. Skipping saveToStorage')
-            return;
-        }
-        chrome.storage.sync.set({state: state}, function () {
-            if (chrome.runtime.error) {
-                console.log("Runtime error while saving data.");
-            }
-            console.log(`Value for 'state' set to  ${JSON.stringify(dataTostore)}`);
-        });
-    }
-
     async fetchDummyData() {
         return {
             tags: [
-                // {tagName: "design"},
-                // {tagName: "code"},
-                // {tagName: "social"},
-                // {tagName: "games"}
+                {tagName: "design"},
+                {tagName: "code"},
+                {tagName: "social"},
+                {tagName: "games"}
             ],
 
             links: [
-                // {
-                //     linkName: "Dribble",
-                //     tagName: "design",
-                //     url: "https://dribbble.com/",
-                //     favIconUrl: "https://www.google.com/favicon.ico",
-                //     desc: "some desc bjgj sbdjsbd msabdjsabjdbsajjkdbsa dmnsadgjsa dsamdbjksabd bjsbdj jjgj jkjkjk hjhjkk jhjkjk jhjkhjkh bjbjkbd sadjsdjksbjdgu jgjg"
-                // },
-                // {linkName: "Color wheel", tagName: "design", url: "https://www.canva.com/colors/color-wheel/", favIconUrl: "https://www.google.com/favicon.ico", desc: "some desc"},
-                // {linkName: "Freepik", tagName: "design", url: "https://www.freepik.com/", favIconUrl: "", title: "", desc: ""},
+                {
+                    linkName: "Dribble",
+                    tagName: "design",
+                    url: "https://dribbble.com/",
+                    favIconUrl: "https://www.google.com/favicon.ico",
+                    desc: "some desc bjgj sbdjsbd msabdjsabjdbsajjkdbsa dmnsadgjsa dsamdbjksabd bjsbdj jjgj jkjkjk hjhjkk jhjkjk jhjkhjkh bjbjkbd sadjsdjksbjdgu jgjg"
+                },
+                {linkName: "Color wheel", tagName: "design", url: "https://www.canva.com/colors/color-wheel/", favIconUrl: "https://www.google.com/favicon.ico", desc: "some desc"},
+                {linkName: "Freepik", tagName: "design", url: "https://www.freepik.com/", favIconUrl: "", title: "", desc: ""},
                 // {linkName: "Gradient Generator", tagName: "design", url: "https://cssgradient.io/", favIconUrl: "", title: "", desc: ""},
                 // {linkName: "Gradient Generator", tagName: "design", url: "https://cssgradient.io/", favIconUrl: "", title: "", desc: ""},
                 // {linkName: "Gradient Generator", tagName: "design", url: "https://cssgradient.io/", favIconUrl: "", title: "", desc: ""},
@@ -106,15 +78,14 @@ class App extends Component {
     }
 
     completeOnboarding = () => {
-        let newState = Object.assign(this.state, {showOnboarding: false});
-        this.saveToStorage(newState);
+        let newState = Object.assign(this.state, {onboardingComplete: true});
         this.setState(newState);
     }
 
-    onAddLinkBtnClick = () => {
+    onAddLinkBtnClick = async () => {
         this.openAddLinkPanel();
         // todo remove this
-        console.log('readFromStorage', this.readFromStorage('state'))
+        console.log('localStorage.read', await this.localStorage.read('state'))
     }
 
     onTagClick = (tag) => {
@@ -135,7 +106,6 @@ class App extends Component {
         // save tag and update state
         if (tag) {
             let newState = Object.assign(this.state, {tags: [...this.state.tags, tag]});
-            this.saveToStorage(newState)
             this.setState(newState)
         }
     }
@@ -145,7 +115,6 @@ class App extends Component {
         this.closeAddLinkPanel()
         if (link) {
             let newState = Object.assign(this.state, {links: [...this.state.links, link]});
-            this.saveToStorage(newState) // save to storage after any save event
             this.setState(newState)
         }
     }
@@ -159,7 +128,8 @@ class App extends Component {
     }
 
     closeAddLinkPanel() {
-        this.setState(Object.assign(this.state, {addLink: false}))
+        let newState = Object.assign(this.state, {addLink: false});
+        this.setState(newState)
     }
 
     toggleTagSelection(tag) {
@@ -185,10 +155,19 @@ class App extends Component {
         return this.state.links.filter(link => link.tagName === this.state.selectedTag);
     }
 
+    /**
+     * Overriding the setState to also save the state to chrome storage in addition to setting the react state
+     */
+    setState(state, callback) {
+        console.log('saving state to localstorage', JSON.stringify(state))
+        this.localStorage.save('state', state) // save to storage after any state update
+        super.setState(state, callback);
+    }
+
     render() {
         console.log("render", Object.assign(this.state))
 
-        const noDataYet = this.state.tags.length == 0 && this.state.links.length == 0
+        const noDataYet = this.state.tags.length === 0 && this.state.links.length === 0
 
         if (this.state.addLink)
             return (
@@ -209,14 +188,14 @@ class App extends Component {
                 <div className="app">
                     <Header>
                         <Logo></Logo>
-                        <Button label="Add Link" classNames="k-btn-dark small">/</Button>
+                        <Button label="Save Page" classNames="k-btn-dark small">/</Button>
                     </Header>
                     <Search searchTerm={this.state.searchTerm} onSearchTermChange={this.onSearchTermChange}></Search>
                     <Links links={this.filterLinksBySearchTerm()} onLinkClick={this.onLinkClick}></Links>
                 </div>
             )
 
-        if (noDataYet && this.state.showOnboarding)
+        if (noDataYet && !this.state.onboardingComplete)
             return (
                 <OnboardingGraphic onComplete={this.completeOnboarding}></OnboardingGraphic>
             )
@@ -225,9 +204,14 @@ class App extends Component {
             <div className="app">
                 <Header>
                     <Logo></Logo>
-                    <Button label="Add Link" classNames="small k-btn-dark" onClick={this.onAddLinkBtnClick}>/</Button>
+                    <Button label="Save Page" classNames="small k-btn-dark" onClick={this.onAddLinkBtnClick}>/</Button>
                 </Header>
                 <Search searchTerm={this.state.searchTerm} onSearchTermChange={this.onSearchTermChange}></Search>
+                {noDataYet ?
+                    (<div className="get-started-img">
+                        <img src="https://kyp-art.s3.us-west-2.amazonaws.com/lets+get+started+image.png" alt="get started"/>
+                        <p>Let's get started by adding a link!</p>
+                    </div>) : null}
                 <Tags selectedTag={this.state.selectedTag}
                       tags={this.state.tags}
                       onTagClick={this.onTagClick}
@@ -237,7 +221,6 @@ class App extends Component {
             </div>
         )
     }
-
 
 }
 

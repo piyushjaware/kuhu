@@ -2,11 +2,11 @@
 
 
 // ----------- colors ------------//
-  $text-light: #a79ccd;
-  $text-dark: #57419d;
-  $primary-color: #57419d;
-  $bg-light: #f7f6fd;
-  $accent: #fb8f99;
+$text-light: #a79ccd;
+$text-dark: #57419d;
+$primary-color: #57419d;
+$bg-light: #f7f6fd;
+$accent: #fb8f99;
 
 
 // ----------- colors ------------//
@@ -41,5 +41,11 @@ $easing: cubic-bezier(0.22, 1, 0.36, 1);
     transform: translateY(0px);
     opacity: 1;
   }
-} 
+}
 
+
+//------util classes--------------//
+
+.text-light {
+  color: $text-light;
+}

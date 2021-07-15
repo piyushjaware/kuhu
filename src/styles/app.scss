@@ -8,6 +8,22 @@
   color: $text-dark;
 
 
+  .get-started-img {
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: center;
+    padding: 100px 0px;
+    align-items: center;
+
+    img {
+      height: 160px;
+    }
+
+    p {
+      padding: 20px;
+    }
+  }
+
   //--------------Basic elements styles override -----------------// 
   a {
     color: $accent;
