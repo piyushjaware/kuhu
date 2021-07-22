@@ -52,22 +52,22 @@ class App extends Component {
     async fetchDummyData() {
         return {
             tags: [
-                {tagName: "design"},
-                {tagName: "code"},
-                {tagName: "social"},
-                {tagName: "games"}
+                // {tagName: "design"},
+                // {tagName: "code"},
+                // {tagName: "social"},
+                // {tagName: "games"}
             ],
 
             links: [
-                {
-                    linkName: "Dribble",
-                    tagName: "design",
-                    url: "https://dribbble.com/",
-                    favIconUrl: "https://www.google.com/favicon.ico",
-                    desc: "some desc bjgj sbdjsbd msabdjsabjdbsajjkdbsa dmnsadgjsa dsamdbjksabd bjsbdj jjgj jkjkjk hjhjkk jhjkjk jhjkhjkh bjbjkbd sadjsdjksbjdgu jgjg"
-                },
-                {linkName: "Color wheel", tagName: "design", url: "https://www.canva.com/colors/color-wheel/", favIconUrl: "https://www.google.com/favicon.ico", desc: "some desc"},
-                {linkName: "Freepik", tagName: "design", url: "https://www.freepik.com/", favIconUrl: "", title: "", desc: ""},
+                // {
+                //     linkName: "Dribble",
+                //     tagName: "design",
+                //     url: "https://dribbble.com/",
+                //     favIconUrl: "https://www.google.com/favicon.ico",
+                //     desc: "some desc bjgj sbdjsbd msabdjsabjdbsajjkdbsa dmnsadgjsa dsamdbjksabd bjsbdj jjgj jkjkjk hjhjkk jhjkjk jhjkhjkh bjbjkbd sadjsdjksbjdgu jgjg"
+                // },
+                // {linkName: "Color wheel", tagName: "design", url: "https://www.canva.com/colors/color-wheel/", favIconUrl: "https://www.google.com/favicon.ico", desc: "some desc"},
+                // {linkName: "Freepik", tagName: "design", url: "https://www.freepik.com/", favIconUrl: "", title: "", desc: ""},
                 // {linkName: "Gradient Generator", tagName: "design", url: "https://cssgradient.io/", favIconUrl: "", title: "", desc: ""},
                 // {linkName: "Gradient Generator", tagName: "design", url: "https://cssgradient.io/", favIconUrl: "", title: "", desc: ""},
                 // {linkName: "Gradient Generator", tagName: "design", url: "https://cssgradient.io/", favIconUrl: "", title: "", desc: ""},

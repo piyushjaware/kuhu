@@ -7,33 +7,27 @@
     justify-content: flex-end;
     align-items: flex-start;
     display: flex;
-  }
-
-  .screen1 {
     height: 600px;
     width: 350px;
-    background-image: url("../assets/onboarding-sceen-1.svg");
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
+  }
+
+  .screen0 {
+    background-image: url("../assets/onboarding-sceen-0.svg");
+  }
+  
+  .screen1 {
+    background-image: url("../assets/onboarding-sceen-1.svg");
   }
 
   .screen2 {
-    height: 600px;
-    width: 350px;
     background-image: url("../assets/onboarding-sceen-2.svg");
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
   }
 
   .screen3 {
-    height: 600px;
-    width: 350px;
     background-image: url("../assets/onboarding-sceen-3.svg");
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
   }
 
   .buttons {
@@ -64,7 +58,7 @@
 
 
   .animate-slide {
-    animation: slide-left 0.4s $easing;
+    animation: slide-left 0.6s $easing;
   }
 
   @keyframes slide-left {
