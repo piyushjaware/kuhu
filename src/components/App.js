@@ -206,11 +206,11 @@ class App extends Component {
                     <Logo></Logo>
                     <Button label="Save Page" classNames="small k-btn-dark" onClick={this.onAddLinkBtnClick}>/</Button>
                 </Header>
-                <Search searchTerm={this.state.searchTerm} onSearchTermChange={this.onSearchTermChange}></Search>
+                <Search searchTerm={this.state.searchTerm} onSearchTermChange={this.onSearchTermChange} autoFocus={!noDataYet}></Search>
                 {noDataYet ?
                     (<div className="get-started-img">
                         <img src="https://kyp-art.s3.us-west-2.amazonaws.com/lets+get+started+image.png" alt="get started"/>
-                        <p>Let's get started by adding a link!</p>
+                        <p>Let's get started by saving a page!</p>
                     </div>) : null}
                 <Tags selectedTag={this.state.selectedTag}
                       tags={this.state.tags}

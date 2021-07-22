@@ -18,7 +18,7 @@ const Link = ({links, onLinkClick}) => {
                     </div>
                 </div>
                 <div className="image-section">
-                    <img className="image" alt="some desc" src={link.favIconUrl}/>
+                    <img className="image" alt="logo" src={link.favIconUrl}/>
                 </div>
 
             </div>

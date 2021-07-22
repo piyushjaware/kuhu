@@ -8,6 +8,7 @@ let OnboardingGraphic = ({onComplete}) => {
 
     const [currentScreen, setCurrentScreen] = useState(1)
     const finalScreen = 3
+    
 
     let onNextClick = () => {
         if (currentScreen === finalScreen) {
