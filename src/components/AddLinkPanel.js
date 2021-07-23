@@ -111,7 +111,7 @@ let AddLinkPanel = ({onLinkSave, onLinkSaveCancel, tags, onTagSave}) => {
                     <AddTag onTagSave={onTagSave} noTagsYet={!tags.length}></AddTag>
                 </div>
             </div>
-            <Button label="Save Link" classNames="fluid k-btn-dark" onClick={onSave}>/</Button>
+            <Button label="Save Link" classNames="fluid k-btn-dark mt30" onClick={onSave}>/</Button>
 
         </div>
     )
