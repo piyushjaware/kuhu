@@ -41,6 +41,13 @@ class App extends Component {
         let data = await this.localStorage.read('state')
         console.log("localStorage.read result", data)
 
+        // Exempt a few fields from backup 
+        for (const dataKey in data) {
+            if (['addLink', 'selectedTag', 'searchTerm'].includes(dataKey)) {
+                delete data[dataKey]
+            }
+        }
+
         if (reactIsInDevMode()) {
             data = await this.fetchDummyData()
             console.log("fetchDummyData", data)
@@ -49,33 +56,6 @@ class App extends Component {
     }
 
 
-    async fetchDummyData() {
-        return {
-            tags: [
-                {tagName: "design"},
-                {tagName: "code"},
-                {tagName: "social"},
-                {tagName: "games"}
-            ],
-
-            links: [
-                {
-                    linkName: "Dribble",
-                    tagName: "design",
-                    url: "https://www.google.com",
-                    favIconUrl: "https://www.google.com/favicon.ico",
-                    desc: "some desc bjgj sbdjsbd msabdjsabjdbsajjkdbsa dmnsadgjsa dsamdbjksabd bjsbdj jjgj jkjkjk hjhjkk jhjkjk jhjkhjkh bjbjkbd sadjsdjksbjdgu jgjg"
-                },
-                // {linkName: "Color wheel", tagName: "design", url: "https://www.canva.com/colors/color-wheel/", favIconUrl: "https://www.google.com/favicon.ico", desc: "some desc"},
-                // {linkName: "Freepik", tagName: "design", url: "https://www.freepik.com/", favIconUrl: "", title: "", desc: ""},
-                // {linkName: "Gradient Generator", tagName: "design", url: "https://cssgradient.io/", favIconUrl: "", title: "", desc: ""},
-                // {linkName: "Gradient Generator", tagName: "design", url: "https://cssgradient.io/", favIconUrl: "", title: "", desc: ""},
-                // {linkName: "Gradient Generator", tagName: "design", url: "https://cssgradient.io/", favIconUrl: "", title: "", desc: ""},
-                // {linkName: "Gradient Generator", tagName: "design", url: "https://cssgradient.io/", favIconUrl: "", title: "", desc: ""},
-                // {linkName: "Eloquent JS", tagName: "code", url: "https://eloquentjavascript.net/index.html", favIconUrl: "", title: "", desc: ""}
-            ]
-        }
-    }
 
     completeOnboarding = () => {
         let newState = Object.assign(this.state, {onboardingComplete: true});
@@ -235,6 +215,65 @@ class App extends Component {
                        onLinkClick={this.onLinkClick}></Links>
             </div>
         )
+    }
+
+    async fetchDummyData() {
+        return {
+            "addLink": false,
+            "selectedTag": "",
+            "searchTerm": "",
+            "onboardingComplete": true,
+            "tags": [{"tagName": "shopping"}, {"tagName": "work"}, {"tagName": "code"}, {"tagName": "design"}, {"tagName": "cloud"}, {"tagName": "read"}],
+            "links": [{
+                "desc": "Amazon.com. Spend less. Smile more.",
+                "favIconUrl": "https://www.amazon.com/favicon.ico",
+                "linkName": "Amazon",
+                "tagName": "shopping",
+                "url": "https://www.amazon.com/"
+            }, {
+                "desc": "HTML semantics cheat sheet · Web Dev Topics · Learn the Web",
+                "favIconUrl": "https://learn-the-web.algonquindesign.ca/favicon.ico",
+                "linkName": "Semantic Html Tags",
+                "tagName": "code",
+                "url": "https://learn-the-web.algonquindesign.ca/topics/html-semantics-cheat-sheet/#text"
+            }, {
+                "desc": "Dribbble - Discover the World’s Top Designers & Creative Professionals",
+                "favIconUrl": "https://cdn.dribbble.com/assets/favicon-b38525134603b9513174ec887944bde1a869eb6cd414f4d640ee48ab2a15a26b.ico",
+                "linkName": "Dribbble",
+                "tagName": "design",
+                "url": "https://dribbble.com/"
+            }, {
+                "desc": "Free Vectors, Stock Photos & PSD Downloads | Freepik",
+                "favIconUrl": "https://freepik.cdnpk.net/img/favicons/favicon.ico?v=2018082101",
+                "linkName": "Freepik",
+                "tagName": "design",
+                "url": "https://www.freepik.com/"
+            }, {
+                "desc": "Free Vector Icons and Stickers - PNG, SVG, EPS, PSD and CSS",
+                "favIconUrl": "https://media.flaticon.com/dist/min/img/favicon.ico",
+                "linkName": "Flaticon",
+                "tagName": "design",
+                "url": "https://www.flaticon.com/"
+            }, {
+                "desc": "Amazon Photos",
+                "favIconUrl": "https://www.amazon.com/favicon.ico",
+                "linkName": "Amazon Photos",
+                "tagName": "cloud",
+                "url": "https://www.amazon.com/photos/all?sort=sortDateUploaded"
+            }, {
+                "desc": "Amazon Drive",
+                "favIconUrl": "https://images-na.ssl-images-amazon.com/images/G/01/digital/adrive/photos/webapp/favicon2.ico",
+                "linkName": "Amazon Drive",
+                "tagName": "cloud",
+                "url": "https://www.amazon.com/clouddrive?ref=ap_usm_drive&mgh=1"
+            }, {
+                "desc": "Kindle: Your Notes and Highlights",
+                "favIconUrl": "https://d3u8ewz6c11pt5.cloudfront.net/static/kp/2.42.4/b393d742cdd2/img/Notebook_Favicon.ico",
+                "linkName": "Kindle HIghlights",
+                "tagName": "read",
+                "url": "https://read.amazon.com/notebook?ref_=kcr_notebook_lib"
+            }]
+        }
     }
 
 }

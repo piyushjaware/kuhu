@@ -5,31 +5,30 @@ import TruncatedText from "./TruncatedText";
 const Link = ({links, onLinkClick}) => {
 
     const linksElemennts = links.map(link =>
-        <a className="link-card" onClick={(e) => {
+        <article className="link-card" onClick={(e) => {
             onLinkClick(e, link)
-        }} href="\" key={link.linkName}>
+        }} key={link.linkName}>
             <div className="content">
-                <div className="text-section">
+                <text className="text-section">
                     <div className="title">
-                        <TruncatedText len={55}>{link.linkName}</TruncatedText>
+                        <TruncatedText len={40}>{link.linkName}</TruncatedText>
                     </div>
-                    <div className="description">
-                        <TruncatedText len={55}>{link.desc}</TruncatedText>
-                    </div>
-                </div>
-                <div className="image-section">
+                    <aside className="description">
+                        <TruncatedText len={40}>{link.desc}</TruncatedText>
+                    </aside>
+                </text>
+                <picture className="image-section">
                     <img className="image" alt="logo" src={link.favIconUrl}/>
-                </div>
-
+                </picture>
             </div>
-        </a>
+        </article>
     )
 
 
     return (
-        <div className="links">
+        <section className="links">
             {linksElemennts}
-        </div>
+        </section>
     )
 }
 

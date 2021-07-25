@@ -4,17 +4,15 @@
   display: flex;
   flex-flow: row wrap;
 
-  margin-top: 5px;
-
   .tag {
-    margin-right: 10px;
-    margin-top: 10px;
+    margin-right: 8px;
+    margin-top: 8px;
   }
 
   .k-label {
     background-color: $bg-light;
     border-radius: $border-radius-one-line-extra;
-    padding: 7px 14px;
+    padding: 5px 8px;
     color: $text-dark;
     font-weight: lighter;
     border: 1px solid $bg-light;

@@ -96,7 +96,7 @@ let AddLinkPanel = ({onLinkSave, onLinkSaveCancel, tags, onTagSave}) => {
                 <div className="k-field mb20">
                     <label>Name</label>
                     <div className="ui small icon input">
-                        <input autoFocus className="k-input" type="text" value={name} onChange={(e) => setName(e.target.value)}/>
+                        <input autoFocus className="k-input" placeholder="eg. Google" type="text" value={name} onChange={(e) => setName(e.target.value)}/>
                     </div>
                     <Error errors={errors} name="name"></Error>
                 </div>
