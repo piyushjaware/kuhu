@@ -9,14 +9,14 @@ const Link = ({links, onLinkClick}) => {
             onLinkClick(e, link)
         }} key={link.linkName}>
             <div className="content">
-                <text className="text-section">
+                <div className="text-section">
                     <div className="title">
                         <TruncatedText len={40}>{link.linkName}</TruncatedText>
                     </div>
                     <aside className="description">
                         <TruncatedText len={40}>{link.desc}</TruncatedText>
                     </aside>
-                </text>
+                </div>
                 <picture className="image-section">
                     <img className="image" alt="logo" src={link.favIconUrl}/>
                 </picture>

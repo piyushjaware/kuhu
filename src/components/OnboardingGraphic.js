@@ -10,10 +10,25 @@ let OnboardingGraphic = ({onComplete}) => {
     const finalScreen = 3
 
     useEffect(() => {
+        let isMounted = true;
         // Keep the logo screen for 2 secs and then switch to the onboarding screen  
-        setTimeout(onNextClick, 1500);
-    }, [])
+        setTimeout(() => {
+            if (isMounted) {
+                flipLoadingScreen()
+            }
+        }, 1500);
 
+        return () => {
+            isMounted = false
+        };
+    })
+
+
+    const flipLoadingScreen = () => {
+        if (currentScreen === 0) {
+            setCurrentScreen(currentScreen + 1)
+        }
+    }
 
     const onNextClick = () => {
         if (currentScreen === finalScreen) {

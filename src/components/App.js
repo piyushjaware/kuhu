@@ -55,8 +55,6 @@ class App extends Component {
         return data
     }
 
-
-
     completeOnboarding = () => {
         let newState = Object.assign(this.state, {onboardingComplete: true});
         this.setState(newState);
@@ -74,7 +72,14 @@ class App extends Component {
 
     onLinkClick = (e, link) => {
         e.preventDefault();
+        this.updateLinkWeight(link);
         this.openUrlAsNewTab(link);
+    }
+
+    updateLinkWeight(link) {
+        let newState = Object.assign(this.state);
+        this.findLink(newState.links, link).weight++
+        this.setState(newState)
     }
 
     onSearchTermChange = (e, searchTerm) => {
@@ -106,13 +111,20 @@ class App extends Component {
     }
 
     tagAlreadyExists(tag) {
-        return this.state.tags.findIndex((t) => t.tagName === tag.tagName) > -1;
+        return !!this.findTag(this.state.tags, tag);
     }
 
     linkAlreadyExists(link) {
-        return this.state.links.findIndex((l) => l.url === link.url) > -1;
+        return !!this.findLink(this.state.links, link);
     }
 
+    findTag(tags, tag) {
+        return tags.find((t) => t.tagName === tag.tagName);
+    }
+
+    findLink(links, link) {
+        return links.find((l) => l.url === link.url);
+    }
 
     onLinkSaveCancel = () => {
         this.closeAddLinkPanel()
@@ -140,15 +152,26 @@ class App extends Component {
     }
 
     filterLinksBySearchTerm() {
-        return this.state.links.filter(link =>
-            JSON.stringify(link)
-                .toUpperCase()
-                .includes(this.state.searchTerm.toUpperCase()));
+        return this.state.links
+            .filter(link =>
+                JSON.stringify(link)
+                    .toUpperCase()
+                    .includes(this.state.searchTerm.toUpperCase()))
+            .sort(this.sortLinks);
     }
 
     filterLinksByTag() {
-        return this.state.links.filter(link => link.tagName === this.state.selectedTag);
+        return this.state.links
+            .filter(link => link.tagName === this.state.selectedTag)
+            .sort(this.sortLinks);
     }
+
+    getAllLinks() {
+        return this.state.links
+            .sort(this.sortLinks);
+    }
+
+    sortLinks = (a, b) => b.weight - a.weight // by weight desc
 
     /**
      * Overriding the setState to also save the state to chrome storage in addition to setting the react state
@@ -211,11 +234,12 @@ class App extends Component {
                       tags={this.state.tags}
                       onTagClick={this.onTagClick}
                       onTagSave={this.onTagSave}></Tags>
-                <Links links={this.state.selectedTag ? this.filterLinksByTag() : this.state.links}
+                <Links links={this.state.selectedTag ? this.filterLinksByTag() : this.getAllLinks()}
                        onLinkClick={this.onLinkClick}></Links>
             </div>
         )
     }
+
 
     async fetchDummyData() {
         return {
@@ -229,49 +253,55 @@ class App extends Component {
                 "favIconUrl": "https://www.amazon.com/favicon.ico",
                 "linkName": "Amazon",
                 "tagName": "shopping",
-                "url": "https://www.amazon.com/"
+                "url": "https://www.amazon.com/",
             }, {
                 "desc": "HTML semantics cheat sheet · Web Dev Topics · Learn the Web",
                 "favIconUrl": "https://learn-the-web.algonquindesign.ca/favicon.ico",
                 "linkName": "Semantic Html Tags",
                 "tagName": "code",
-                "url": "https://learn-the-web.algonquindesign.ca/topics/html-semantics-cheat-sheet/#text"
+                "url": "https://learn-the-web.algonquindesign.ca/topics/html-semantics-cheat-sheet/#text",
             }, {
                 "desc": "Dribbble - Discover the World’s Top Designers & Creative Professionals",
                 "favIconUrl": "https://cdn.dribbble.com/assets/favicon-b38525134603b9513174ec887944bde1a869eb6cd414f4d640ee48ab2a15a26b.ico",
                 "linkName": "Dribbble",
                 "tagName": "design",
-                "url": "https://dribbble.com/"
+                "url": "https://dribbble.com/",
+                "weight": 1
             }, {
                 "desc": "Free Vectors, Stock Photos & PSD Downloads | Freepik",
                 "favIconUrl": "https://freepik.cdnpk.net/img/favicons/favicon.ico?v=2018082101",
                 "linkName": "Freepik",
                 "tagName": "design",
-                "url": "https://www.freepik.com/"
+                "url": "https://www.freepik.com/",
+                "weight": 1
             }, {
                 "desc": "Free Vector Icons and Stickers - PNG, SVG, EPS, PSD and CSS",
                 "favIconUrl": "https://media.flaticon.com/dist/min/img/favicon.ico",
                 "linkName": "Flaticon",
                 "tagName": "design",
-                "url": "https://www.flaticon.com/"
+                "url": "https://www.flaticon.com/",
+                "weight": 1
             }, {
                 "desc": "Amazon Photos",
                 "favIconUrl": "https://www.amazon.com/favicon.ico",
                 "linkName": "Amazon Photos",
                 "tagName": "cloud",
-                "url": "https://www.amazon.com/photos/all?sort=sortDateUploaded"
+                "url": "https://www.amazon.com/photos/all?sort=sortDateUploaded",
+                "weight": 1
             }, {
                 "desc": "Amazon Drive",
                 "favIconUrl": "https://images-na.ssl-images-amazon.com/images/G/01/digital/adrive/photos/webapp/favicon2.ico",
                 "linkName": "Amazon Drive",
                 "tagName": "cloud",
-                "url": "https://www.amazon.com/clouddrive?ref=ap_usm_drive&mgh=1"
+                "url": "https://www.amazon.com/clouddrive?ref=ap_usm_drive&mgh=1",
+                "weight": 1
             }, {
                 "desc": "Kindle: Your Notes and Highlights",
                 "favIconUrl": "https://d3u8ewz6c11pt5.cloudfront.net/static/kp/2.42.4/b393d742cdd2/img/Notebook_Favicon.ico",
                 "linkName": "Kindle HIghlights",
                 "tagName": "read",
-                "url": "https://read.amazon.com/notebook?ref_=kcr_notebook_lib"
+                "url": "https://read.amazon.com/notebook?ref_=kcr_notebook_lib",
+                "weight": 1
             }]
         }
     }
