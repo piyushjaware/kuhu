@@ -1,10 +1,12 @@
 import '../styles/header.scss'
+import Logo from "./Logo"
+import Button from "./Button"
 
-let Header = (props) => {
-
+let Header = ({ showSaveBtn = true, onSaveBtnClick }) => {
     return (
         <div className="header">
-            {props.children}
+            <Logo></Logo>
+            {showSaveBtn && <Button label="Save Page" classNames="small k-btn-dark" onClick={onSaveBtnClick}>/</Button>}
         </div>
     )
 }

@@ -4,12 +4,11 @@ import Links from "./Links";
 import Search from "./Search";
 import Header from "./Header";
 import AddLinkPanel from "./AddLinkPanel";
-import {reactIsInDevMode, LocalStorage} from '../utils/common'
+import { reactIsInDevMode, LocalStorage } from '../utils/common'
 
 import '../styles/app.scss'
 import Tags from "./Tags";
-import {Component} from "react";
-import Logo from "./Logo";
+import { Component } from "react";
 import OnboardingGraphic from "./OnboardingGraphic";
 
 
@@ -20,6 +19,7 @@ class App extends Component {
         selectedTag: '',
         searchTerm: '',
         onboardingComplete: false,
+        editMode: false,
         tags: [],
         links: []
     }
@@ -55,15 +55,15 @@ class App extends Component {
         return data
     }
 
-    completeOnboarding = () => {
-        let newState = Object.assign(this.state, {onboardingComplete: true});
+    onOnboardingComplete = () => {
+        let newState = Object.assign(this.state, { onboardingComplete: true });
         this.setState(newState);
     }
 
-    onAddLinkBtnClick = async () => {
+    onAddLinkBtnClick = () => {
         this.openAddLinkPanel();
         // todo remove this
-        console.log('localStorage.read', await this.localStorage.read('state'))
+        // console.log('localStorage.read', await this.localStorage.read('state'))
     }
 
     onTagClick = (tag) => {
@@ -84,7 +84,7 @@ class App extends Component {
 
     onSearchTermChange = (e, searchTerm) => {
         // update the search term
-        this.setState(Object.assign(this.state, {searchTerm}))
+        this.setState(Object.assign(this.state, { searchTerm }))
     }
 
     onTagSave = (tag) => {
@@ -93,7 +93,7 @@ class App extends Component {
             if (this.tagAlreadyExists(tag)) {
                 return;
             }
-            let newState = Object.assign(this.state, {tags: [...this.state.tags, tag]});
+            let newState = Object.assign(this.state, { tags: [...this.state.tags, tag] });
             this.setState(newState)
         }
     }
@@ -105,7 +105,7 @@ class App extends Component {
             if (this.linkAlreadyExists(link)) {
                 return;
             }
-            let newState = Object.assign(this.state, {links: [...this.state.links, link]});
+            let newState = Object.assign(this.state, { links: [...this.state.links, link] });
             this.setState(newState)
         }
     }
@@ -131,20 +131,20 @@ class App extends Component {
     }
 
     openAddLinkPanel() {
-        this.setState(Object.assign(this.state, {addLink: true}))
+        this.setState(Object.assign(this.state, { addLink: true }))
     }
 
     closeAddLinkPanel() {
-        let newState = Object.assign(this.state, {addLink: false});
+        let newState = Object.assign(this.state, { addLink: false });
         this.setState(newState)
     }
 
     toggleTagSelection(tag) {
         if (tag.tagName === this.state.selectedTag) { // selected tag was clicked. In that case toggle 
-            this.setState(Object.assign(this.state, {selectedTag: ''}))
+            this.setState(Object.assign(this.state, { selectedTag: '' }))
             return
         }
-        this.setState(Object.assign(this.state, {selectedTag: tag.tagName}))
+        this.setState(Object.assign(this.state, { selectedTag: tag.tagName }))
     }
 
     openUrlAsNewTab(link) {
@@ -182,17 +182,18 @@ class App extends Component {
         super.setState(state, callback);
     }
 
+    showOnboarding(noDataYet) {
+        return noDataYet && !this.state.onboardingComplete;
+    }
+
     render() {
         console.log("render", Object.assign(this.state))
-
         const noDataYet = this.state.tags.length === 0 && this.state.links.length === 0
 
         if (this.state.addLink)
             return (
                 <div className="app">
-                    <Header>
-                        <Logo></Logo>
-                    </Header>
+                    <Header showSaveBtn={false} />
                     <AddLinkPanel
                         onLinkSave={this.onLinkSave}
                         onLinkSaveCancel={this.onLinkSaveCancel}
@@ -201,44 +202,42 @@ class App extends Component {
                     </AddLinkPanel>
                 </div>)
 
+
+
         if (this.state.searchTerm)
             return (
                 <div className="app">
-                    <Header>
-                        <Logo></Logo>
-                        <Button label="Save Page" classNames="k-btn-dark small">/</Button>
-                    </Header>
+                    <Header onSaveBtnClick={this.onAddLinkBtnClick} />
                     <Search searchTerm={this.state.searchTerm} onSearchTermChange={this.onSearchTermChange}></Search>
                     <Links links={this.filterLinksBySearchTerm()} onLinkClick={this.onLinkClick}></Links>
                 </div>
             )
 
-        if (noDataYet && !this.state.onboardingComplete)
+        if (this.showOnboarding())
             return (
-                <OnboardingGraphic onComplete={this.completeOnboarding}></OnboardingGraphic>
+                <OnboardingGraphic onComplete={this.onOnboardingComplete}></OnboardingGraphic>
             )
 
         return (
             <div className="app">
-                <Header>
-                    <Logo></Logo>
-                    <Button label="Save Page" classNames="small k-btn-dark" onClick={this.onAddLinkBtnClick}>/</Button>
-                </Header>
+                <Header onSaveBtnClick={this.onAddLinkBtnClick} />
                 <Search searchTerm={this.state.searchTerm} onSearchTermChange={this.onSearchTermChange} autoFocus={!noDataYet}></Search>
                 {noDataYet ?
                     (<div className="get-started-img">
-                        <img src="https://kyp-art.s3.us-west-2.amazonaws.com/lets+get+started+image.png" alt="get started"/>
+                        <img src="https://kyp-art.s3.us-west-2.amazonaws.com/lets+get+started+image.png" alt="get started" />
                         <p>Let's get started by saving a page!</p>
                     </div>) : null}
                 <Tags selectedTag={this.state.selectedTag}
-                      tags={this.state.tags}
-                      onTagClick={this.onTagClick}
-                      onTagSave={this.onTagSave}></Tags>
+                    tags={this.state.tags}
+                    onTagClick={this.onTagClick}
+                    onTagSave={this.onTagSave}></Tags>
                 <Links links={this.state.selectedTag ? this.filterLinksByTag() : this.getAllLinks()}
-                       onLinkClick={this.onLinkClick}></Links>
+                    onLinkClick={this.onLinkClick}></Links>
             </div>
         )
     }
+
+
 
 
     async fetchDummyData() {
@@ -247,7 +246,7 @@ class App extends Component {
             "selectedTag": "",
             "searchTerm": "",
             "onboardingComplete": true,
-            "tags": [{"tagName": "shopping"}, {"tagName": "work"}, {"tagName": "code"}, {"tagName": "design"}, {"tagName": "cloud"}, {"tagName": "read"}],
+            "tags": [{ "tagName": "shopping" }, { "tagName": "work" }, { "tagName": "code" }, { "tagName": "design" }, { "tagName": "cloud" }, { "tagName": "read" }],
             "links": [{
                 "desc": "Amazon.com. Spend less. Smile more.",
                 "favIconUrl": "https://www.amazon.com/favicon.ico",
