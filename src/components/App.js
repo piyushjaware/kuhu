@@ -1,15 +1,13 @@
-/* eslint-disable no-undef */
-import Button from "./Button";
-import Links from "./Links";
-import Search from "./Search";
-import Header from "./Header";
-import AddLinkPanel from "./AddLinkPanel";
+import Links from "./Links"
+import Search from "./Search"
+import Header from "./Header"
+import AddLinkPanel from "./AddLinkPanel"
 import { reactIsInDevMode, LocalStorage } from '../utils/common'
 
 import '../styles/app.scss'
-import Tags from "./Tags";
-import { Component } from "react";
-import OnboardingGraphic from "./OnboardingGraphic";
+import Tags from "./Tags"
+import { Component } from "react"
+import OnboardingGraphic from "./OnboardingGraphic"
 
 
 class App extends Component {
@@ -19,7 +17,7 @@ class App extends Component {
         selectedTag: '',
         searchTerm: '',
         onboardingComplete: false,
-        editMode: false,
+        editMode: !false,
         tags: [],
         links: []
     }
@@ -28,7 +26,7 @@ class App extends Component {
 
     async componentDidMount() {
         console.log("App mounting ")
-        let data = await this.loadData();
+        let data = await this.loadData()
         this.setState(Object.assign(this.state, data))
     }
 
@@ -56,28 +54,29 @@ class App extends Component {
     }
 
     onOnboardingComplete = () => {
-        let newState = Object.assign(this.state, { onboardingComplete: true });
-        this.setState(newState);
+        let newState = Object.assign(this.state, { onboardingComplete: true })
+        this.setState(newState)
     }
 
     onAddLinkBtnClick = () => {
-        this.openAddLinkPanel();
+        this.openAddLinkPanel()
         // todo remove this
         // console.log('localStorage.read', await this.localStorage.read('state'))
     }
 
     onTagClick = (tag) => {
-        this.toggleTagSelection(tag);
+        this.toggleTagSelection(tag)
     }
 
     onLinkClick = (e, link) => {
-        e.preventDefault();
-        this.updateLinkWeight(link);
-        this.openUrlAsNewTab(link);
+        e.preventDefault()
+        this.updateLinkWeight(link)
+        this.openUrlAsNewTab(link)
     }
 
+
     updateLinkWeight(link) {
-        let newState = Object.assign(this.state);
+        let newState = Object.assign(this.state)
         this.findLink(newState.links, link).weight++
         this.setState(newState)
     }
@@ -91,9 +90,9 @@ class App extends Component {
         // save tag and update state
         if (tag) {
             if (this.tagAlreadyExists(tag)) {
-                return;
+                return
             }
-            let newState = Object.assign(this.state, { tags: [...this.state.tags, tag] });
+            let newState = Object.assign(this.state, { tags: [...this.state.tags, tag] })
             this.setState(newState)
         }
     }
@@ -103,27 +102,43 @@ class App extends Component {
         this.closeAddLinkPanel()
         if (link) {
             if (this.linkAlreadyExists(link)) {
-                return;
+                return
             }
-            let newState = Object.assign(this.state, { links: [...this.state.links, link] });
+            let newState = Object.assign(this.state, { links: [...this.state.links, link] })
             this.setState(newState)
         }
     }
 
+    onLinkDelete = (linkToDelete) => {
+        if (linkToDelete) {
+            if (!this.linkAlreadyExists(linkToDelete)) {
+                return
+            }
+            const filterRemaining = (l) => !this.areLinksEqual(l, linkToDelete)
+            let newState = Object.assign(this.state, { links: this.state.links.filter(filterRemaining) })
+            this.setState(newState)
+        }
+    }
+
+
     tagAlreadyExists(tag) {
-        return !!this.findTag(this.state.tags, tag);
+        return !!this.findTag(this.state.tags, tag)
     }
 
     linkAlreadyExists(link) {
-        return !!this.findLink(this.state.links, link);
+        return !!this.findLink(this.state.links, link)
     }
 
     findTag(tags, tag) {
-        return tags.find((t) => t.tagName === tag.tagName);
+        return tags.find((t) => t.tagName === tag.tagName)
     }
 
     findLink(links, link) {
-        return links.find((l) => l.url === link.url);
+        return links.find((l) => l.url === link.url)
+    }
+
+    areLinksEqual(l1, l2) {
+        return l1.url === l2.url
     }
 
     onLinkSaveCancel = () => {
@@ -135,7 +150,7 @@ class App extends Component {
     }
 
     closeAddLinkPanel() {
-        let newState = Object.assign(this.state, { addLink: false });
+        let newState = Object.assign(this.state, { addLink: false })
         this.setState(newState)
     }
 
@@ -148,7 +163,7 @@ class App extends Component {
     }
 
     openUrlAsNewTab(link) {
-        window.open(link.url, '_blank').focus();
+        window.open(link.url, '_blank').focus()
     }
 
     filterLinksBySearchTerm() {
@@ -157,18 +172,18 @@ class App extends Component {
                 JSON.stringify(link)
                     .toUpperCase()
                     .includes(this.state.searchTerm.toUpperCase()))
-            .sort(this.sortLinks);
+            .sort(this.sortLinks)
     }
 
     filterLinksByTag() {
         return this.state.links
             .filter(link => link.tagName === this.state.selectedTag)
-            .sort(this.sortLinks);
+            .sort(this.sortLinks)
     }
 
     getAllLinks() {
         return this.state.links
-            .sort(this.sortLinks);
+            .sort(this.sortLinks)
     }
 
     sortLinks = (a, b) => b.weight - a.weight // by weight desc
@@ -179,11 +194,11 @@ class App extends Component {
     setState(state, callback) {
         console.log('saving state to localstorage', JSON.stringify(state))
         this.localStorage.save('state', state) // save to storage after any state update
-        super.setState(state, callback);
+        super.setState(state, callback)
     }
 
     showOnboarding(noDataYet) {
-        return noDataYet && !this.state.onboardingComplete;
+        return noDataYet && !this.state.onboardingComplete
     }
 
     render() {
@@ -209,7 +224,10 @@ class App extends Component {
                 <div className="app">
                     <Header onSaveBtnClick={this.onAddLinkBtnClick} />
                     <Search searchTerm={this.state.searchTerm} onSearchTermChange={this.onSearchTermChange}></Search>
-                    <Links links={this.filterLinksBySearchTerm()} onLinkClick={this.onLinkClick}></Links>
+                    <Links links={this.filterLinksBySearchTerm()}
+                        onLinkClick={this.onLinkClick}
+                        editMode={this.state.editMode}
+                        onLinkDelete={this.onLinkDelete}></Links>
                 </div>
             )
 
@@ -232,7 +250,9 @@ class App extends Component {
                     onTagClick={this.onTagClick}
                     onTagSave={this.onTagSave}></Tags>
                 <Links links={this.state.selectedTag ? this.filterLinksByTag() : this.getAllLinks()}
-                    onLinkClick={this.onLinkClick}></Links>
+                    onLinkClick={this.onLinkClick}
+                    editMode={this.state.editMode}
+                    onLinkDelete={this.onLinkDelete}></Links>
             </div>
         )
     }
@@ -307,4 +327,4 @@ class App extends Component {
 
 }
 
-export default App;
+export default App

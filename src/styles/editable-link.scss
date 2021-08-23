@@ -1,0 +1,14 @@
+@import "src/styles/global";
+
+.editable-link {
+  margin-top: 10px;
+
+  a.icon-btn {
+    float: right;
+  }
+  .link {
+    &:hover {
+      background-color: white;
+    }
+  }
+}

@@ -1,0 +1,29 @@
+@import "src/styles/global";
+
+.icon-btn {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  background-color: lighten($primary-color, 50%);
+  border-radius: 22px;
+  width: 22px;
+  height: 22px;
+
+  // border: 1px solid red;
+
+  i {
+    color: $primary-color;
+    line-height: 12px;
+    font-size: 12px;
+
+    // border: 1px solid red;
+  }
+
+  &:hover {
+    .icon {
+      color: white;
+    }
+    background-color: $primary-color;
+  }
+}

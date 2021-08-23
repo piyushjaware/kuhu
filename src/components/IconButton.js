@@ -1,8 +1,11 @@
-let IconButton = ({iconName, onClick, classNames}) => {
+import '../styles/icon-btn.scss'
+
+let IconButton = ({ iconName, onClick, classNames }) => {
     return (
-        <button className={`ui icon button ${classNames}`} onClick={() => onClick()}>
+        <a className={`icon-btn ${classNames}`} href="/" onClick={(e) => { e.preventDefault(); onClick() }}>
             <i className={`icon ${iconName}`}></i>
-        </button>
+        </a>
     )
+    
 }
 export default IconButton

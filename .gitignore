@@ -38,3 +38,4 @@ amplify-gradle-config.json
 amplifyxc.config
 /.idea/
 /chrome-extension
+.vscode
