@@ -2,7 +2,7 @@ import Links from "./Links"
 import Search from "./Search"
 import Header from "./Header"
 import AddLinkPanel from "./AddLinkPanel"
-import { reactIsInDevMode, LocalStorage } from '../utils/common'
+import { reactIsInDevMode, LocalStorage, handleLegacyData } from '../utils/common'
 
 import '../styles/app.scss'
 import Tags from "./Tags"
@@ -14,10 +14,10 @@ class App extends Component {
 
     state = {
         addLink: false,
-        selectedTag: '',
+        selectedTags: [],
         searchTerm: '',
         onboardingComplete: false,
-        editMode: !false,
+        editMode: false,
         tags: [],
         links: []
     }
@@ -27,6 +27,7 @@ class App extends Component {
     async componentDidMount() {
         console.log("App mounting ")
         let data = await this.loadData()
+        data = handleLegacyData(data)
         this.setState(Object.assign(this.state, data))
     }
 
@@ -41,7 +42,7 @@ class App extends Component {
 
         // Exempt a few fields from backup 
         for (const dataKey in data) {
-            if (['addLink', 'selectedTag', 'searchTerm'].includes(dataKey)) {
+            if (['addLink', 'selectedTags', 'searchTerm'].includes(dataKey)) {
                 delete data[dataKey]
             }
         }
@@ -155,11 +156,12 @@ class App extends Component {
     }
 
     toggleTagSelection(tag) {
-        if (tag.tagName === this.state.selectedTag) { // selected tag was clicked. In that case toggle 
-            this.setState(Object.assign(this.state, { selectedTag: '' }))
+        let currentSelectedTags = this.state.selectedTags
+        if (currentSelectedTags.includes(tag.tagName)) { // selected tag was clicked. In that case toggle 
+            this.setState(Object.assign(this.state, { selectedTags: currentSelectedTags.filter((t) => t !== tag.tagName) }))
             return
         }
-        this.setState(Object.assign(this.state, { selectedTag: tag.tagName }))
+        this.setState(Object.assign(this.state, { selectedTags: [...currentSelectedTags, tag.tagName] }))
     }
 
     openUrlAsNewTab(link) {
@@ -177,7 +179,16 @@ class App extends Component {
 
     filterLinksByTag() {
         return this.state.links
-            .filter(link => link.tagName === this.state.selectedTag)
+            .filter(link => {
+                let match = false;
+                for (let linkTag of link.tags) {
+                    if (this.state.selectedTags.includes(linkTag)) {
+                        match = true;
+                        break;
+                    }
+                }
+                return match;
+            })
             .sort(this.sortLinks)
     }
 
@@ -245,11 +256,11 @@ class App extends Component {
                         <img src="https://kyp-art.s3.us-west-2.amazonaws.com/lets+get+started+image.png" alt="get started" />
                         <p>Let's get started by saving a page!</p>
                     </div>) : null}
-                <Tags selectedTag={this.state.selectedTag}
+                <Tags selectedTags={this.state.selectedTags}
                     tags={this.state.tags}
                     onTagClick={this.onTagClick}
                     onTagSave={this.onTagSave}></Tags>
-                <Links links={this.state.selectedTag ? this.filterLinksByTag() : this.getAllLinks()}
+                <Links links={this.state.selectedTags.length ? this.filterLinksByTag() : this.getAllLinks()}
                     onLinkClick={this.onLinkClick}
                     editMode={this.state.editMode}
                     onLinkDelete={this.onLinkDelete}></Links>
@@ -263,7 +274,7 @@ class App extends Component {
     async fetchDummyData() {
         return {
             "addLink": false,
-            "selectedTag": "",
+            "selectedTags": [],
             "searchTerm": "",
             "onboardingComplete": true,
             "tags": [{ "tagName": "shopping" }, { "tagName": "work" }, { "tagName": "code" }, { "tagName": "design" }, { "tagName": "cloud" }, { "tagName": "read" }],

@@ -1,17 +1,17 @@
-import {useEffect, useState} from "react"
+import { useEffect, useState } from "react"
 import Button from "./Button"
 import Tags from "./Tags"
 import "../styles/addLinkPanel.scss"
 import IconButton from "./IconButton";
-import {reactIsInDevMode} from '../utils/common'
+import { reactIsInDevMode } from '../utils/common'
 import AddTag from "./AddTag";
 import Error from "./Error";
 import React from 'react'
 
 
-let AddLinkPanel = ({onLinkSave, onLinkSaveCancel, tags, onTagSave}) => {
+let AddLinkPanel = ({ onLinkSave, onLinkSaveCancel, tags, onTagSave }) => {
 
-    const [chosenTag, setChosenTag] = useState({tagName: ''})
+    const [chosenTags, setChosenTags] = useState([])
     const [name, setName] = useState('')
     const [errors, setErrors] = useState([])
     const [tab, setTab] = useState({})
@@ -20,9 +20,9 @@ let AddLinkPanel = ({onLinkSave, onLinkSaveCancel, tags, onTagSave}) => {
     useEffect(() => {
         async function getCurrentTab() {
             if (reactIsInDevMode()) {
-                return {url: "https://www.google.com", favIconUrl: "https://semantic-ui.com/images/logo.png", title: "Google"}
+                return { url: "https://www.google.com", favIconUrl: "https://semantic-ui.com/images/logo.png", title: "Google" }
             }
-            let queryOptions = {active: true, currentWindow: true};
+            let queryOptions = { active: true, currentWindow: true };
             // eslint-disable-next-line no-undef
             let [tab] = await chrome.tabs.query(queryOptions);
             return tab;
@@ -42,7 +42,7 @@ let AddLinkPanel = ({onLinkSave, onLinkSaveCancel, tags, onTagSave}) => {
         // setErrors('')// reset errors 
         if (!validateForm())
             return
-        const linkToSave = {linkName: name, url: tab.url, tagName: chosenTag.tagName, favIconUrl: tab.favIconUrl, desc: tab.desc}
+        const linkToSave = { linkName: name, url: tab.url, tags: chosenTags, favIconUrl: tab.favIconUrl, desc: tab.desc }
         onLinkSave(linkToSave)
     }
 
@@ -65,11 +65,11 @@ let AddLinkPanel = ({onLinkSave, onLinkSaveCancel, tags, onTagSave}) => {
             })
             validationSuccess = false;
         }
-        if (!chosenTag.tagName) {
+        if (!chosenTags.length) {
             validationErrors.push({
                 type: 'field',
                 name: 'tagName',
-                msg: <React.Fragment>Please choose a <b>tag</b> for the link.</React.Fragment>
+                msg: <React.Fragment>Please choose one or more <b>tags</b> for the link.</React.Fragment>
             })
             validationSuccess = false;
         }
@@ -80,7 +80,15 @@ let AddLinkPanel = ({onLinkSave, onLinkSaveCancel, tags, onTagSave}) => {
         return validationSuccess
     }
 
-    console.log(chosenTag, tab, name, errors)
+
+    const toggleTagSelection = (tag) => {
+        if (chosenTags.includes(tag.tagName)) { // selected tag was clicked. In that case remove 
+            setChosenTags(chosenTags.filter((t) => t !== tag.tagName))
+            return
+        }
+        setChosenTags([...chosenTags, tag.tagName])
+    }
+
 
     return (
         <div className="add-link-panel">
@@ -96,17 +104,17 @@ let AddLinkPanel = ({onLinkSave, onLinkSaveCancel, tags, onTagSave}) => {
                 <div className="k-field mb20">
                     <label>Name</label>
                     <div className="ui small icon input">
-                        <input autoFocus className="k-input" placeholder="eg. Google" type="text" value={name} onChange={(e) => setName(e.target.value)}/>
+                        <input autoFocus className="k-input" placeholder="eg. Google" type="text" value={name} onChange={(e) => setName(e.target.value)} />
                     </div>
                     <Error errors={errors} name="name"></Error>
                 </div>
                 <div className="k-field mb20">
-                    <label>Choose Tag</label>
-                    <Tags selectedTag={chosenTag.tagName}
-                          tags={tags}
-                          onTagClick={setChosenTag}
-                          onTagSave={onTagSave}
-                          allowAddTag={true}></Tags>
+                    <label>Choose Tags</label>
+                    <Tags selectedTags={chosenTags}
+                        tags={tags}
+                        onTagClick={toggleTagSelection}
+                        onTagSave={onTagSave}
+                        allowAddTag={true}></Tags>
                     <Error errors={errors} name="tagName"></Error>
                     <AddTag onTagSave={onTagSave} noTagsYet={!tags.length}></AddTag>
                 </div>

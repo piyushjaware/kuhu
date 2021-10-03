@@ -9,6 +9,23 @@ export function truncate(str, len) {
     return str.length > len ? str.substring(0, len - 3) + '...' : str
 }
 
+export function handleLegacyData(data) {
+    let result = Object.assign({}, data);
+    result.links = result.links.map(tagNameToTags())
+    return result;
+}
+
+// Mapper for mapping legacy tagName to tags
+function tagNameToTags() {
+    return l => {
+        l.tags = l.tags || []
+        if (l.tagName && !l.tags.includes(l.tagName)) {
+            l.tags.push(l.tagName)
+        }
+        delete l.tagName
+        return l
+    }
+}
 
 export class LocalStorage {
 
@@ -19,7 +36,7 @@ export class LocalStorage {
             return Promise.resolve('')
         }
         return new Promise((resolve, reject) =>
-            chrome.storage.sync.get(key, result =>
+            chrome.storage.local.get(key, result =>
                 chrome.runtime.lastError
                     ? reject(Error(chrome.runtime.lastError.message))
                     : resolve(result[key])
@@ -37,12 +54,14 @@ export class LocalStorage {
         data[keyToSave] = valueToSave;
 
         return new Promise((resolve, reject) =>
-            chrome.storage.sync.set(data, () =>
+            chrome.storage.local.set(data, () =>
                 chrome.runtime.lastError
                     ? reject(Error(chrome.runtime.lastError.message))
                     : resolve()
             )
         )
     }
+
+
 }
 
