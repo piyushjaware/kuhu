@@ -213,8 +213,8 @@ class App extends Component {
     }
 
     render() {
-        console.log("render", Object.assign(this.state))
-        const noDataYet = this.state.tags.length === 0 && this.state.links.length === 0
+        // console.log("render", Object.assign(this.state))
+        let noDataYet = this.state.tags.length === 0 && this.state.links.length === 0
 
         if (this.state.addLink)
             return (
@@ -250,7 +250,7 @@ class App extends Component {
         return (
             <div className="app">
                 <Header onSaveBtnClick={this.onAddLinkBtnClick} />
-                <Search searchTerm={this.state.searchTerm} onSearchTermChange={this.onSearchTermChange} autoFocus={!noDataYet}></Search>
+                <Search searchTerm={this.state.searchTerm} onSearchTermChange={this.onSearchTermChange}></Search>
                 {noDataYet ?
                     (<div className="get-started-img">
                         <img src="https://kyp-art.s3.us-west-2.amazonaws.com/lets+get+started+image.png" alt="get started" />
