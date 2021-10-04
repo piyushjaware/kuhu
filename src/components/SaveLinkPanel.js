@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 import Button from "./Button"
 import Tags from "./Tags"
-import "../styles/addLinkPanel.scss"
+import "../styles/saveLinkPanel.scss"
 import IconButton from "./IconButton";
 import { reactIsInDevMode } from '../utils/common'
 import AddTag from "./AddTag";
@@ -9,7 +9,7 @@ import Error from "./Error";
 import React from 'react'
 
 
-let AddLinkPanel = ({ onLinkSave, onLinkSaveCancel, tags, onTagSave }) => {
+let SaveLinkPanel = ({ link, onLinkSave, onLinkSaveCancel, tags, onTagSave }) => {
 
     const [chosenTags, setChosenTags] = useState([])
     const [name, setName] = useState('')
@@ -124,4 +124,4 @@ let AddLinkPanel = ({ onLinkSave, onLinkSaveCancel, tags, onTagSave }) => {
         </div>
     )
 }
-export default AddLinkPanel
+export default SaveLinkPanel

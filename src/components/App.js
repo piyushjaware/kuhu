@@ -1,7 +1,7 @@
 import Links from "./Links"
 import Search from "./Search"
 import Header from "./Header"
-import AddLinkPanel from "./AddLinkPanel"
+import SaveLinkPanel from "./SaveLinkPanel"
 import { reactIsInDevMode, LocalStorage, handleLegacyData } from '../utils/common'
 
 import '../styles/app.scss'
@@ -13,7 +13,7 @@ import OnboardingGraphic from "./OnboardingGraphic"
 class App extends Component {
 
     state = {
-        addLink: false,
+        saveLink: false,
         selectedTags: [],
         searchTerm: '',
         onboardingComplete: false,
@@ -42,7 +42,7 @@ class App extends Component {
 
         // Exempt a few fields from backup 
         for (const dataKey in data) {
-            if (['addLink', 'selectedTags', 'searchTerm'].includes(dataKey)) {
+            if (['saveLink', 'selectedTags', 'searchTerm'].includes(dataKey)) {
                 delete data[dataKey]
             }
         }
@@ -60,7 +60,7 @@ class App extends Component {
     }
 
     onAddLinkBtnClick = () => {
-        this.openAddLinkPanel()
+        this.openSaveLinkPanel()
         // todo remove this
         // console.log('localStorage.read', await this.localStorage.read('state'))
     }
@@ -100,7 +100,7 @@ class App extends Component {
 
     onLinkSave = (link) => {
         // close add link panel, save link and update state
-        this.closeAddLinkPanel()
+        this.closeSaveLinkPanel()
         if (link) {
             if (this.linkAlreadyExists(link)) {
                 return
@@ -143,15 +143,15 @@ class App extends Component {
     }
 
     onLinkSaveCancel = () => {
-        this.closeAddLinkPanel()
+        this.closeSaveLinkPanel()
     }
 
-    openAddLinkPanel() {
-        this.setState(Object.assign(this.state, { addLink: true }))
+    openSaveLinkPanel() {
+        this.setState(Object.assign(this.state, { saveLink: true }))
     }
 
-    closeAddLinkPanel() {
-        let newState = Object.assign(this.state, { addLink: false })
+    closeSaveLinkPanel() {
+        let newState = Object.assign(this.state, { saveLink: false })
         this.setState(newState)
     }
 
@@ -216,16 +216,16 @@ class App extends Component {
         // console.log("render", Object.assign(this.state))
         let noDataYet = this.state.tags.length === 0 && this.state.links.length === 0
 
-        if (this.state.addLink)
+        if (this.state.saveLink)
             return (
                 <div className="app">
                     <Header showSaveBtn={false} />
-                    <AddLinkPanel
+                    <SaveLinkPanel
                         onLinkSave={this.onLinkSave}
                         onLinkSaveCancel={this.onLinkSaveCancel}
                         tags={this.state.tags}
                         onTagSave={this.onTagSave}>
-                    </AddLinkPanel>
+                    </SaveLinkPanel>
                 </div>)
 
 
@@ -274,7 +274,7 @@ class App extends Component {
 
     async fetchDummyData() {
         return {
-            "addLink": false,
+            "saveLink": false,
             "selectedTags": [],
             "searchTerm": "",
             "onboardingComplete": true,
