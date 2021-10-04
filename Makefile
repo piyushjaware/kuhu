@@ -1,5 +1,7 @@
 .PHONY: validate build invoke clean build-tests inspect-files test deploy-qa deploy-prod
 
+install:
+	npm install
 
 run:
 	npm start

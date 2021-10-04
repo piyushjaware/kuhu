@@ -263,7 +263,8 @@ class App extends Component {
                 <Links links={this.state.selectedTags.length ? this.filterLinksByTag() : this.getAllLinks()}
                     onLinkClick={this.onLinkClick}
                     editMode={this.state.editMode}
-                    onLinkDelete={this.onLinkDelete}></Links>
+                    onLinkDelete={this.onLinkDelete}
+                    onEditBtnClick={this.onAddLinkBtnClick}></Links>
             </div>
         )
     }
