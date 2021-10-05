@@ -17,10 +17,12 @@ class App extends Component {
         selectedTags: [],
         searchTerm: '',
         onboardingComplete: false,
-        editMode: false,
+        editMode: !false,
         tags: [],
         links: []
     }
+
+    currentLinkToSave = {}
 
     localStorage = new LocalStorage()
 
@@ -59,8 +61,9 @@ class App extends Component {
         this.setState(newState)
     }
 
-    onAddLinkBtnClick = () => {
+    onSaveLinkBtnClick = currentLinkToSave => {
         this.openSaveLinkPanel()
+        this.currentLinkToSave = currentLinkToSave
         // todo remove this
         // console.log('localStorage.read', await this.localStorage.read('state'))
     }
@@ -102,10 +105,15 @@ class App extends Component {
         // close add link panel, save link and update state
         this.closeSaveLinkPanel()
         if (link) {
+            let newState
             if (this.linkAlreadyExists(link)) {
-                return
+                let existingLinks = this.state.links
+                const foundIndex = this.findLinkIndex(existingLinks, link);
+                existingLinks[foundIndex] = link;
+                newState = Object.assign(this.state, { links: existingLinks })
+            } else {
+                newState = Object.assign(this.state, { links: [...this.state.links, link] })
             }
-            let newState = Object.assign(this.state, { links: [...this.state.links, link] })
             this.setState(newState)
         }
     }
@@ -136,6 +144,10 @@ class App extends Component {
 
     findLink(links, link) {
         return links.find((l) => l.url === link.url)
+    }
+
+    findLinkIndex(links, link) {
+        return links.findIndex((l) => l.url === link.url)
     }
 
     areLinksEqual(l1, l2) {
@@ -221,6 +233,7 @@ class App extends Component {
                 <div className="app">
                     <Header showSaveBtn={false} />
                     <SaveLinkPanel
+                        existinglink={this.currentLinkToSave ? this.currentLinkToSave : {}}
                         onLinkSave={this.onLinkSave}
                         onLinkSaveCancel={this.onLinkSaveCancel}
                         tags={this.state.tags}
@@ -233,7 +246,7 @@ class App extends Component {
         if (this.state.searchTerm)
             return (
                 <div className="app">
-                    <Header onSaveBtnClick={this.onAddLinkBtnClick} />
+                    <Header onSaveBtnClick={this.onSaveLinkBtnClick} />
                     <Search searchTerm={this.state.searchTerm} onSearchTermChange={this.onSearchTermChange}></Search>
                     <Links links={this.filterLinksBySearchTerm()}
                         onLinkClick={this.onLinkClick}
@@ -249,7 +262,7 @@ class App extends Component {
 
         return (
             <div className="app">
-                <Header onSaveBtnClick={this.onAddLinkBtnClick} />
+                <Header onSaveBtnClick={this.onSaveLinkBtnClick} />
                 <Search searchTerm={this.state.searchTerm} onSearchTermChange={this.onSearchTermChange}></Search>
                 {noDataYet ?
                     (<div className="get-started-img">
@@ -264,7 +277,7 @@ class App extends Component {
                     onLinkClick={this.onLinkClick}
                     editMode={this.state.editMode}
                     onLinkDelete={this.onLinkDelete}
-                    onEditBtnClick={this.onAddLinkBtnClick}></Links>
+                    onEditBtnClick={this.onSaveLinkBtnClick}></Links>
             </div>
         )
     }
@@ -285,6 +298,7 @@ class App extends Component {
                 "linkName": "Amazon",
                 "tagName": "shopping",
                 "url": "https://www.amazon.com/",
+                "weight": 10
             }, {
                 "desc": "HTML semantics cheat sheet · Web Dev Topics · Learn the Web",
                 "favIconUrl": "https://learn-the-web.algonquindesign.ca/favicon.ico",

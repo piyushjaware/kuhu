@@ -8,11 +8,18 @@ import AddTag from "./AddTag";
 import Error from "./Error";
 import React from 'react'
 
+/**
+ * 
+ * Param: link: If present, the panel prepopulates fields from the link data 
+ * Fields prepopulated include name, chosenTags and tab
+ * Only linkName and tags are editable
+ * 
+ * @returns 
+ */
+let SaveLinkPanel = ({ existinglink, onLinkSave, onLinkSaveCancel, tags, onTagSave }) => {
 
-let SaveLinkPanel = ({ link, onLinkSave, onLinkSaveCancel, tags, onTagSave }) => {
-
-    const [chosenTags, setChosenTags] = useState([])
-    const [name, setName] = useState('')
+    const [chosenTags, setChosenTags] = useState(existinglink.tags || [])
+    const [name, setName] = useState(existinglink.linkName || '')
     const [errors, setErrors] = useState([])
     const [tab, setTab] = useState({})
 
@@ -28,21 +35,34 @@ let SaveLinkPanel = ({ link, onLinkSave, onLinkSaveCancel, tags, onTagSave }) =>
             return tab;
         }
 
-        getCurrentTab().then(chromeTab => {
-            setTab({
-                url: chromeTab.url,
-                desc: chromeTab.title, // map title to desc for now TODO: check if we can get desc later
-                favIconUrl: chromeTab.favIconUrl,
+        if (!existinglink.url) { // skip if editing a link
+            getCurrentTab().then(chromeTab => {
+                setTab({
+                    url: chromeTab.url,
+                    desc: chromeTab.title, // map title to desc for now TODO: check if we can get desc later
+                    favIconUrl: chromeTab.favIconUrl,
+                })
             })
-        })
-    }, [tab.url])
+        } else {
+            setTab({
+                url: existinglink.url,
+                desc: existinglink.desc, // map title to desc for now TODO: check if we can get desc later
+                favIconUrl: existinglink.favIconUrl,
+            })
+        }
+    }, [tab.url, existinglink])
 
 
     const onSave = () => {
         // setErrors('')// reset errors 
         if (!validateForm())
             return
-        const linkToSave = { linkName: name, url: tab.url, tags: chosenTags, favIconUrl: tab.favIconUrl, desc: tab.desc }
+        let linkToSave
+        if (existinglink.url) { // editing
+            linkToSave = Object.assign({}, existinglink, { linkName: name, tags: chosenTags })
+        } else {
+            linkToSave = { linkName: name, url: tab.url, tags: chosenTags, favIconUrl: tab.favIconUrl, desc: tab.desc }
+        }
         onLinkSave(linkToSave)
     }
 
