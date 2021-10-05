@@ -3,9 +3,17 @@ import Button from "./Button"
 import IconButton from "./IconButton";
 import "../styles/save-tag.scss"
 
-let SaveTag = ({onTagSave, noTagsYet}) => {
+/**
+ *
+ * Param: existingTag: If present, the panel pre-populates fields from the tag object
+ * Fields prepopulated include tagName
+ * Only [tagName] are editable
+ *
+ * @returns
+ */
+let SaveTag = ({existingTag = {}, onTagSave, noTagsYet}) => {
 
-    const [tagName, setTagName] = useState('')
+    const [tagName, setTagName] = useState(existingTag.tagName || '')
     const [inputMode, setInputMode] = useState(false)
     const [error, setError] = useState('')
 
@@ -16,11 +24,17 @@ let SaveTag = ({onTagSave, noTagsYet}) => {
 
         setError('')// reset error 
         if (!validateLink()) return
-
-
         setTagName(''); //clear local tag
         setInputMode(false);
-        onTagSave({tagName})
+
+
+        let tagToSave
+        if (existingTag.tagName) { // editing
+            tagToSave = {tagName: existingTag.tagName, newTagName: tagName}
+        } else {
+            tagToSave = {tagName}
+        }
+        onTagSave(tagToSave)
     }
 
     const validateLink = () => {

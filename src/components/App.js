@@ -2,11 +2,11 @@ import Links from "./Links"
 import Search from "./Search"
 import Header from "./Header"
 import SaveLinkPanel from "./SaveLinkPanel"
-import { reactIsInDevMode, LocalStorage, handleLegacyData } from '../utils/common'
+import {reactIsInDevMode, LocalStorage, handleLegacyData} from '../utils/common'
 
 import '../styles/app.scss'
 import Tags from "./Tags"
-import { Component } from "react"
+import {Component} from "react"
 import OnboardingGraphic from "./OnboardingGraphic"
 
 
@@ -57,7 +57,7 @@ class App extends Component {
     }
 
     onOnboardingComplete = () => {
-        let newState = Object.assign(this.state, { onboardingComplete: true })
+        let newState = Object.assign(this.state, {onboardingComplete: true})
         this.setState(newState)
     }
 
@@ -87,18 +87,53 @@ class App extends Component {
 
     onSearchTermChange = (e, searchTerm) => {
         // update the search term
-        this.setState(Object.assign(this.state, { searchTerm }))
+        this.setState(Object.assign(this.state, {searchTerm}))
     }
 
     onTagSave = (tag) => {
         // save tag and update state
         if (tag) {
-            if (this.tagAlreadyExists(tag)) {
-                return
+            let newState
+            if (tag.newTagName) { // save an existing renamed tag
+                newState = this.getStateForRenamedTag(tag);
+            } else if (this.tagAlreadyExists(tag) && !tag.newTagName) {
+                return // don't do anything if tag with same name exists already
+            } else { // fresh new tag
+                newState = Object.assign(this.state, {tags: [...this.state.tags, tag]})
             }
-            let newState = Object.assign(this.state, { tags: [...this.state.tags, tag] })
             this.setState(newState)
         }
+    }
+
+    getStateForRenamedTag(tag) {
+        let existingTags = this.state.tags
+        let updatedTag = Object.assign({}, tag)
+        const existingTagIndex = this.findTagIndex(existingTags, updatedTag);
+        // merge new tag obj 
+        this.reformatUpdatedTag(updatedTag);
+        existingTags[existingTagIndex] = updatedTag;
+        // propagate renamed tag change to links
+        let updatedLinks = this.renameTagsInLinks(tag, updatedTag);
+        return Object.assign(this.state, {tags: existingTags, links: updatedLinks})
+    }
+
+// reformats by removing temp fields and copying temp fields to original fields
+    reformatUpdatedTag(updatedTag) {
+        updatedTag.tagName = updatedTag.newTagName // copy new name to name field
+        delete updatedTag.newTagName // remove this temporary property
+    }
+
+    renameTagsInLinks(existingTag, updatedTag) {
+        let updatedLinks = this.state.links.map(link => {
+            link.tags = link.tags.map(t => {
+                if (t === existingTag.tagName) { // compare with old name
+                    return updatedTag.tagName
+                }
+                return t
+            })
+            return link
+        })
+        return updatedLinks;
     }
 
     onLinkSave = (link) => {
@@ -107,15 +142,19 @@ class App extends Component {
         if (link) {
             let newState
             if (this.linkAlreadyExists(link)) {
-                let existingLinks = this.state.links
-                const foundIndex = this.findLinkIndex(existingLinks, link);
-                existingLinks[foundIndex] = link;
-                newState = Object.assign(this.state, { links: existingLinks })
+                newState = this.getStateForEditedLink(link);
             } else {
-                newState = Object.assign(this.state, { links: [...this.state.links, link] })
+                newState = Object.assign(this.state, {links: [...this.state.links, link]})
             }
             this.setState(newState)
         }
+    }
+
+    getStateForEditedLink(link) {
+        let existingLinks = this.state.links
+        const existingLinkIndex = this.findLinkIndex(existingLinks, link);
+        existingLinks[existingLinkIndex] = link;
+        return Object.assign(this.state, {links: existingLinks})
     }
 
     onLinkDelete = (linkToDelete) => {
@@ -124,7 +163,7 @@ class App extends Component {
                 return
             }
             const filterRemaining = (l) => !this.areLinksEqual(l, linkToDelete)
-            let newState = Object.assign(this.state, { links: this.state.links.filter(filterRemaining) })
+            let newState = Object.assign(this.state, {links: this.state.links.filter(filterRemaining)})
             this.setState(newState)
         }
     }
@@ -140,6 +179,10 @@ class App extends Component {
 
     findTag(tags, tag) {
         return tags.find((t) => t.tagName === tag.tagName)
+    }
+
+    findTagIndex(tags, tag) {
+        return tags.findIndex((t) => t.tagName === tag.tagName)
     }
 
     findLink(links, link) {
@@ -159,21 +202,21 @@ class App extends Component {
     }
 
     openSaveLinkPanel() {
-        this.setState(Object.assign(this.state, { saveLink: true }))
+        this.setState(Object.assign(this.state, {saveLink: true}))
     }
 
     closeSaveLinkPanel() {
-        let newState = Object.assign(this.state, { saveLink: false })
+        let newState = Object.assign(this.state, {saveLink: false})
         this.setState(newState)
     }
 
     toggleTagSelection(tag) {
         let currentSelectedTags = this.state.selectedTags
         if (currentSelectedTags.includes(tag.tagName)) { // selected tag was clicked. In that case toggle 
-            this.setState(Object.assign(this.state, { selectedTags: currentSelectedTags.filter((t) => t !== tag.tagName) }))
+            this.setState(Object.assign(this.state, {selectedTags: currentSelectedTags.filter((t) => t !== tag.tagName)}))
             return
         }
-        this.setState(Object.assign(this.state, { selectedTags: [...currentSelectedTags, tag.tagName] }))
+        this.setState(Object.assign(this.state, {selectedTags: [...currentSelectedTags, tag.tagName]}))
     }
 
     openUrlAsNewTab(link) {
@@ -231,9 +274,9 @@ class App extends Component {
         if (this.state.saveLink)
             return (
                 <div className="app">
-                    <Header showSaveBtn={false} />
+                    <Header showSaveBtn={false}/>
                     <SaveLinkPanel
-                        existinglink={this.currentLinkToSave ? this.currentLinkToSave : {}}
+                        existingLink={this.currentLinkToSave ? this.currentLinkToSave : {}}
                         onLinkSave={this.onLinkSave}
                         onLinkSaveCancel={this.onLinkSaveCancel}
                         tags={this.state.tags}
@@ -242,16 +285,15 @@ class App extends Component {
                 </div>)
 
 
-
         if (this.state.searchTerm)
             return (
                 <div className="app">
-                    <Header onSaveBtnClick={this.onSaveLinkBtnClick} />
+                    <Header onSaveBtnClick={this.onSaveLinkBtnClick}/>
                     <Search searchTerm={this.state.searchTerm} onSearchTermChange={this.onSearchTermChange}></Search>
                     <Links links={this.filterLinksBySearchTerm()}
-                        onLinkClick={this.onLinkClick}
-                        editMode={this.state.editMode}
-                        onLinkDelete={this.onLinkDelete}></Links>
+                           onLinkClick={this.onLinkClick}
+                           editMode={this.state.editMode}
+                           onLinkDelete={this.onLinkDelete}></Links>
                 </div>
             )
 
@@ -262,27 +304,25 @@ class App extends Component {
 
         return (
             <div className="app">
-                <Header onSaveBtnClick={this.onSaveLinkBtnClick} />
+                <Header onSaveBtnClick={this.onSaveLinkBtnClick}/>
                 <Search searchTerm={this.state.searchTerm} onSearchTermChange={this.onSearchTermChange}></Search>
                 {noDataYet ?
                     (<div className="get-started-img">
-                        <img src="https://kyp-art.s3.us-west-2.amazonaws.com/lets+get+started+image.png" alt="get started" />
+                        <img src="https://kyp-art.s3.us-west-2.amazonaws.com/lets+get+started+image.png" alt="get started"/>
                         <p>Let's get started by saving a page!</p>
                     </div>) : null}
                 <Tags selectedTags={this.state.selectedTags}
-                    tags={this.state.tags}
-                    onTagClick={this.onTagClick}
-                    onTagSave={this.onTagSave}></Tags>
+                      tags={this.state.tags}
+                      onTagClick={this.onTagClick}
+                      onTagSave={this.onTagSave}></Tags>
                 <Links links={this.state.selectedTags.length ? this.filterLinksByTag() : this.getAllLinks()}
-                    onLinkClick={this.onLinkClick}
-                    editMode={this.state.editMode}
-                    onLinkDelete={this.onLinkDelete}
-                    onEditBtnClick={this.onSaveLinkBtnClick}></Links>
+                       onLinkClick={this.onLinkClick}
+                       editMode={this.state.editMode}
+                       onLinkDelete={this.onLinkDelete}
+                       onEditBtnClick={this.onSaveLinkBtnClick}></Links>
             </div>
         )
     }
-
-
 
 
     async fetchDummyData() {
@@ -291,7 +331,7 @@ class App extends Component {
             "selectedTags": [],
             "searchTerm": "",
             "onboardingComplete": true,
-            "tags": [{ "tagName": "shopping" }, { "tagName": "work" }, { "tagName": "code" }, { "tagName": "design" }, { "tagName": "cloud" }, { "tagName": "read" }],
+            "tags": [{"tagName": "shopping"}, {"tagName": "work"}, {"tagName": "code"}, {"tagName": "design"}, {"tagName": "cloud"}, {"tagName": "read"}],
             "links": [{
                 "desc": "Amazon.com. Spend less. Smile more.",
                 "favIconUrl": "https://www.amazon.com/favicon.ico",

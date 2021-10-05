@@ -10,16 +10,16 @@ import React from 'react'
 
 /**
  * 
- * Param: link: If present, the panel prepopulates fields from the link data 
+ * Param: existingLink: If present, the panel pre-populates fields from the link object 
  * Fields prepopulated include name, chosenTags and tab
- * Only linkName and tags are editable
+ * Only [linkName,tags] are editable
  * 
  * @returns 
  */
-let SaveLinkPanel = ({ existinglink, onLinkSave, onLinkSaveCancel, tags, onTagSave }) => {
+let SaveLinkPanel = ({ existingLink={}, onLinkSave, onLinkSaveCancel, tags, onTagSave }) => {
 
-    const [chosenTags, setChosenTags] = useState(existinglink.tags || [])
-    const [name, setName] = useState(existinglink.linkName || '')
+    const [chosenTags, setChosenTags] = useState(existingLink.tags || [])
+    const [name, setName] = useState(existingLink.linkName || '')
     const [errors, setErrors] = useState([])
     const [tab, setTab] = useState({})
 
@@ -35,7 +35,7 @@ let SaveLinkPanel = ({ existinglink, onLinkSave, onLinkSaveCancel, tags, onTagSa
             return tab;
         }
 
-        if (!existinglink.url) { // skip if editing a link
+        if (!existingLink.url) { // skip if editing a link
             getCurrentTab().then(chromeTab => {
                 setTab({
                     url: chromeTab.url,
@@ -45,12 +45,12 @@ let SaveLinkPanel = ({ existinglink, onLinkSave, onLinkSaveCancel, tags, onTagSa
             })
         } else {
             setTab({
-                url: existinglink.url,
-                desc: existinglink.desc, // map title to desc for now TODO: check if we can get desc later
-                favIconUrl: existinglink.favIconUrl,
+                url: existingLink.url,
+                desc: existingLink.desc, // map title to desc for now TODO: check if we can get desc later
+                favIconUrl: existingLink.favIconUrl,
             })
         }
-    }, [tab.url, existinglink])
+    }, [tab.url, existingLink])
 
 
     const onSave = () => {
@@ -58,8 +58,8 @@ let SaveLinkPanel = ({ existinglink, onLinkSave, onLinkSaveCancel, tags, onTagSa
         if (!validateForm())
             return
         let linkToSave
-        if (existinglink.url) { // editing
-            linkToSave = Object.assign({}, existinglink, { linkName: name, tags: chosenTags })
+        if (existingLink.url) { // editing
+            linkToSave = Object.assign({}, existingLink, { linkName: name, tags: chosenTags })
         } else {
             linkToSave = { linkName: name, url: tab.url, tags: chosenTags, favIconUrl: tab.favIconUrl, desc: tab.desc }
         }
