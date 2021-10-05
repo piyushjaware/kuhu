@@ -1,19 +1,16 @@
 import '../styles/tags.scss'
+import EditableTag from "./EditableTag";
+import Tag from "./Tag";
 
-const Tags = ({selectedTags, tags, onTagClick}) => {
-
-    const tagElements = tags.map(tag =>
-        <a role="button" className="tag" href="/" onClick={(e) => {
-            e.preventDefault();
-            onTagClick(tag)
-        }} key={tag.tagName}>
-            <div className={`ui label k-label ${selectedTags.includes(tag.tagName) ? 'selected' : ''}`}>{tag.tagName}</div>
-        </a>
-    )
+const Tags = ({selectedTags, tags, onTagClick, editMode, onTagSave}) => {
 
     return (
         <div className="tags">
-            {tagElements}
+            {tags.map(tag =>
+                editMode
+                    ? <EditableTag tag={tag} onTagSave={onTagSave}></EditableTag>
+                    : <Tag tag={tag} onTagClick={onTagClick} selected={selectedTags.includes(tag.tagName)}></Tag>
+            )}
         </div>
     )
 }

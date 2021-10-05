@@ -4,6 +4,10 @@
   display: flex;
   flex-flow: row wrap;
 
+  .icon-btn {
+    float: right;
+  }
+
   .tag {
     margin-right: 8px;
     margin-top: 8px;
@@ -23,7 +27,5 @@
     font-weight: 500;
     color: $text-dark;
   }
-
+  
 }
-
-

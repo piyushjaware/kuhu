@@ -314,7 +314,9 @@ class App extends Component {
                 <Tags selectedTags={this.state.selectedTags}
                       tags={this.state.tags}
                       onTagClick={this.onTagClick}
-                      onTagSave={this.onTagSave}></Tags>
+                      onTagSave={this.onTagSave}
+                      editMode={this.state.editMode}
+                ></Tags>
                 <Links links={this.state.selectedTags.length ? this.filterLinksByTag() : this.getAllLinks()}
                        onLinkClick={this.onLinkClick}
                        editMode={this.state.editMode}
