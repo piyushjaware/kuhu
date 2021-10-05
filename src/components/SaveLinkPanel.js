@@ -4,7 +4,7 @@ import Tags from "./Tags"
 import "../styles/saveLinkPanel.scss"
 import IconButton from "./IconButton";
 import { reactIsInDevMode } from '../utils/common'
-import AddTag from "./AddTag";
+import SaveTag from "./SaveTag";
 import Error from "./Error";
 import React from 'react'
 
@@ -136,7 +136,7 @@ let SaveLinkPanel = ({ existinglink, onLinkSave, onLinkSaveCancel, tags, onTagSa
                         onTagSave={onTagSave}
                         allowAddTag={true}></Tags>
                     <Error errors={errors} name="tagName"></Error>
-                    <AddTag onTagSave={onTagSave} noTagsYet={!tags.length}></AddTag>
+                    <SaveTag onTagSave={onTagSave} noTagsYet={!tags.length}></SaveTag>
                 </div>
             </div>
             <Button label="Save Link" classNames="fluid k-btn-dark mt30" onClick={onSave}>/</Button>

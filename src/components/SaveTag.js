@@ -1,9 +1,9 @@
 import {useState} from "react";
 import Button from "./Button"
 import IconButton from "./IconButton";
-import "../styles/add-tag.scss"
+import "../styles/save-tag.scss"
 
-let AddTag = ({onTagSave, noTagsYet}) => {
+let SaveTag = ({onTagSave, noTagsYet}) => {
 
     const [tagName, setTagName] = useState('')
     const [inputMode, setInputMode] = useState(false)
@@ -33,12 +33,12 @@ let AddTag = ({onTagSave, noTagsYet}) => {
 
 
     return (
-        <div className="add-tag tag">
+        <div className="save-tag tag">
             {inputMode
                 ?
                 <div className="ui action input tiny">
                     <input autoFocus type="text" value={tagName} placeholder="eg: work" onChange={(e) => setTagName(e.target.value.toLowerCase())}/>
-                    {/*<Button iconClass="add" classNames="add-tag-icon-btn" onClick={e => onSaveBtnClick()}>/</Button>*/}
+                    {/*<Button iconClass="add" classNames="save-tag-icon-btn" onClick={e => onSaveBtnClick()}>/</Button>*/}
                     <IconButton iconName="save" classNames="" onClick={e => onSaveBtnClick()}></IconButton>
                     <IconButton iconName="cancel" onClick={e => setInputMode(false)}></IconButton>
                 </div>
@@ -49,4 +49,4 @@ let AddTag = ({onTagSave, noTagsYet}) => {
     )
 }
 
-export default AddTag
+export default SaveTag
