@@ -1,5 +1,11 @@
 @import "src/styles/global";
 
+#root {
+  height: 600px; /*max height for chrome popup*/
+  width: 350px;
+  background-color: white;
+  overflow-y: auto;
+}
 
 .app {
   padding: 15px;

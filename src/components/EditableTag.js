@@ -1,5 +1,4 @@
 import '../styles/editable-link.scss'
-import Link from './Link'
 import IconButton from "./IconButton"
 import SaveTag from "./SaveTag";
 import {useState} from "react";
@@ -11,15 +10,29 @@ const EditableTag = ({tag, onTagSave}) => {
 
     const onEditButtonClick = () => {
         console.log("onEditButtonClick")
+        setTagToEdit(true)
+    }
+
+    const onTagSaveClick = (tag) => {
+        onTagSave(tag)
+        setTagToEdit(false)
+    }
+
+    const onTagSaveCancelClick = () => {
+        setTagToEdit(false)
     }
 
     return (
-        <div className="editable-tag">
-            <IconButton iconName="edit icon" classNames="circular mini" onClick={onEditButtonClick}></IconButton>
-            <Tag tag={tag}
-                 onTagClick={() => {
-                 }}
-                 selected={false}></Tag>
+        <div className="editable-tag" key={tag.tagName}>
+            {!tagToEdit
+                ? <div>
+                    <IconButton iconName="edit icon" classNames="circular mini" onClick={onEditButtonClick}></IconButton>
+                    <Tag tag={tag}
+                         onTagClick={() => {
+                         }}
+                         selected={false}> </Tag>
+                </div>
+                : <SaveTag existingTag={tag} onTagSave={onTagSaveClick} autoLaunch={true} onCancel={onTagSaveCancelClick}></SaveTag>}
         </div>
     )
 }

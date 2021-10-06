@@ -11,10 +11,10 @@ import "../styles/save-tag.scss"
  *
  * @returns
  */
-let SaveTag = ({existingTag = {}, onTagSave, noTagsYet}) => {
+let SaveTag = ({existingTag = {}, onTagSave, autoLaunch = false, onCancel = ""}) => {
 
     const [tagName, setTagName] = useState(existingTag.tagName || '')
-    const [inputMode, setInputMode] = useState(false)
+    const [inputMode, setInputMode] = useState(autoLaunch)
     const [error, setError] = useState('')
 
     const onAddTagClick = () => {
@@ -45,20 +45,29 @@ let SaveTag = ({existingTag = {}, onTagSave, noTagsYet}) => {
         return true
     }
 
+    const onCancelClick = () => {
+        if (onCancel) {
+            onCancel()
+        } else {
+            setInputMode(false)
+        }
+    }
 
     return (
         <div className="save-tag tag">
             {inputMode
                 ?
-                <div className="ui action input tiny">
-                    <input autoFocus type="text" value={tagName} placeholder="eg: work" onChange={(e) => setTagName(e.target.value.toLowerCase())}/>
+                <div className="save-tag-input-row">
+                    <div className="ui input tiny">
+                        <input autoFocus type="text" value={tagName} placeholder="eg: work" onChange={(e) => setTagName(e.target.value.toLowerCase())}/>
+                    </div>
                     {/*<Button iconClass="add" classNames="save-tag-icon-btn" onClick={e => onSaveBtnClick()}>/</Button>*/}
                     <IconButton iconName="save" classNames="" onClick={e => onSaveBtnClick()}></IconButton>
-                    <IconButton iconName="cancel" onClick={e => setInputMode(false)}></IconButton>
+                    <IconButton iconName="cancel" onClick={e => onCancelClick()}></IconButton>
+                    <div className="error">{error}</div>
                 </div>
                 : <Button label="Create Tag" classNames="mini k-btn-dark hollow" onClick={e => onAddTagClick(e)}>/</Button>
             }
-            <div className="error">{error}</div>
         </div>
     )
 }
