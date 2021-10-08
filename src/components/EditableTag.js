@@ -1,4 +1,4 @@
-import '../styles/editable-link.scss'
+import '../styles/editable-tag.scss'
 import IconButton from "./IconButton"
 import SaveTag from "./SaveTag";
 import {useState} from "react";
@@ -23,7 +23,7 @@ const EditableTag = ({tag, onTagSave}) => {
     }
 
     return (
-        <div className="editable-tag" key={tag.tagName}>
+        <div className="editable-tag" key={tag.tagName + "_editable"}>
             {!tagToEdit
                 ? <div>
                     <IconButton iconName="edit icon" classNames="circular mini" onClick={onEditButtonClick}></IconButton>

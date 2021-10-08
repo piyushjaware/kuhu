@@ -8,6 +8,7 @@ import '../styles/app.scss'
 import Tags from "./Tags"
 import {Component} from "react"
 import OnboardingGraphic from "./OnboardingGraphic"
+import getStartedImage from "../assets/lets+get+started+image.png"
 
 
 class App extends Component {
@@ -17,7 +18,7 @@ class App extends Component {
         selectedTags: [],
         searchTerm: '',
         onboardingComplete: false,
-        editMode: !false,
+        editMode: false,
         tags: [],
         links: []
     }
@@ -39,7 +40,7 @@ class App extends Component {
 
     async loadData() {
 
-        let data = await this.localStorage.read('state')
+        let data = await this.localStorage.read('state') || {tags: [], links: []}
         console.log("localStorage.read result", data)
 
         // Exempt a few fields from backup 
@@ -50,8 +51,8 @@ class App extends Component {
         }
 
         if (reactIsInDevMode()) {
-            data = await this.fetchDummyData()
-            console.log("fetchDummyData", data)
+            // data = await this.fetchDummyData()
+            // console.log("fetchDummyData", data)
         }
         return data
     }
@@ -168,6 +169,16 @@ class App extends Component {
         }
     }
 
+    onEditSelect = () => {
+        let newState = Object.assign(this.state, {editMode: true})
+        this.setState(newState)
+    }
+
+    onEditExit = () => {
+        let newState = Object.assign(this.state, {editMode: false})
+        this.setState(newState)
+    }
+
 
     tagAlreadyExists(tag) {
         return !!this.findTag(this.state.tags, tag)
@@ -258,23 +269,21 @@ class App extends Component {
      * Overriding the setState to also save the state to chrome storage in addition to setting the react state
      */
     setState(state, callback) {
-        console.log('saving state to localstorage', JSON.stringify(state))
+        // console.log('saving state to localstorage', JSON.stringify(state))
         this.localStorage.save('state', state) // save to storage after any state update
         super.setState(state, callback)
     }
 
-    showOnboarding(noDataYet) {
-        return noDataYet && !this.state.onboardingComplete
+    showOnboarding() {
+        return this.noDataYet() && !this.state.onboardingComplete
     }
 
     render() {
-        // console.log("render", Object.assign(this.state))
-        let noDataYet = this.state.tags.length === 0 && this.state.links.length === 0
 
         if (this.state.saveLink)
             return (
                 <div className="app">
-                    <Header showSaveBtn={false}/>
+                    <Header showSaveBtn={false} showOptions={false} editMode={this.state.editMode} onEditSelect={this.onEditSelect} onEditExit={this.onEditExit}/>
                     <SaveLinkPanel
                         existingLink={this.currentLinkToSave ? this.currentLinkToSave : {}}
                         onLinkSave={this.onLinkSave}
@@ -288,12 +297,13 @@ class App extends Component {
         if (this.state.searchTerm)
             return (
                 <div className="app">
-                    <Header onSaveBtnClick={this.onSaveLinkBtnClick}/>
+                    <Header onSaveBtnClick={this.onSaveLinkBtnClick} editMode={this.state.editMode} onEditSelect={this.onEditSelect} onEditExit={this.onEditExit}/>
                     <Search searchTerm={this.state.searchTerm} onSearchTermChange={this.onSearchTermChange}></Search>
                     <Links links={this.filterLinksBySearchTerm()}
                            onLinkClick={this.onLinkClick}
                            editMode={this.state.editMode}
-                           onLinkDelete={this.onLinkDelete}></Links>
+                           onLinkDelete={this.onLinkDelete}
+                           onEditBtnClick={this.onSaveLinkBtnClick}></Links>
                 </div>
             )
 
@@ -304,11 +314,11 @@ class App extends Component {
 
         return (
             <div className="app">
-                <Header onSaveBtnClick={this.onSaveLinkBtnClick}/>
+                <Header onSaveBtnClick={this.onSaveLinkBtnClick} editMode={this.state.editMode} onEditSelect={this.onEditSelect} onEditExit={this.onEditExit}/>
                 <Search searchTerm={this.state.searchTerm} onSearchTermChange={this.onSearchTermChange}></Search>
-                {noDataYet ?
+                {this.noDataYet() ?
                     (<div className="get-started-img">
-                        <img src="https://kyp-art.s3.us-west-2.amazonaws.com/lets+get+started+image.png" alt="get started"/>
+                        <img src={getStartedImage} alt="Let's get started"/>
                         <p>Let's get started by saving a page!</p>
                     </div>) : null}
                 <Tags selectedTags={this.state.selectedTags}
@@ -326,6 +336,11 @@ class App extends Component {
         )
     }
 
+
+    noDataYet() {
+        let noDataYet = this.state.tags.length === 0 && this.state.links.length === 0
+        return noDataYet;
+    }
 
     async fetchDummyData() {
         return {

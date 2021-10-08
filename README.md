@@ -27,3 +27,30 @@ The onboarding screens are full svgs that span the whole viewport. They are expo
 
 
 
+
+
+----
+
+Single purpose
+Save, Organize and Access Sites easily and quickly!
+
+Description
+The Kuhu extension allows to
+
+- Save Sites or Pages you think you would need to retrieve later
+- Quickly click and launch the saved page in a new tab
+- Create tags to associate with the Pages to keep them organized
+- See all the saved Pages and easily search or filter by tags
+- Edit/delete tags or saved pages
+
+You see pages sorted by how frequently you access them, so you can launch them even quicker!
+All your data is stored locally in the browser and not sent to Kuhu servers!
+
+
+Permission justification 
+
+activeTab
+Get the URL, title, and favicon for that tab using the chrome.tabs api.
+
+storage
+Store and retrieve user data in the local storage.

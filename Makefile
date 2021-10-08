@@ -10,8 +10,11 @@ move-to-dist:
 	rm -f -r chrome-extension/*
 	cp build/manifest.json chrome-extension
 	cp build/icon32.* chrome-extension
+	cp build/icon48.* chrome-extension
+	cp build/icon128.* chrome-extension
 	cp build/index.html chrome-extension
 	cp -R build/static/ chrome-extension/static
+	zip -r chrome-extension/kuhu.zip chrome-extension
 
 build-npm: 
 	npm run build

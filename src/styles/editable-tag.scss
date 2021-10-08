@@ -2,8 +2,18 @@
 
 .editable-tag {
 
+  border-radius: $border-radius-one-line-extra;
+  background-color: $bg-light;;
+  margin-right: 10px;
+  margin-top: 5px;
+  overflow: hidden;
+  
+  display: flex;
+  align-items: center;
+
   .icon-btn {
-    float: right;
-    margin-right: 5px;
+    //float: right;
+    //margin-right: 5px;
+
   }
 }

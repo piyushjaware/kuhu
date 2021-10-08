@@ -54,7 +54,7 @@ let SaveTag = ({existingTag = {}, onTagSave, autoLaunch = false, onCancel = ""})
     }
 
     return (
-        <div className="save-tag tag">
+        <div className="save-tag">
             {inputMode
                 ?
                 <div className="save-tag-input-row">

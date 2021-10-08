@@ -1,22 +1,22 @@
-import { useEffect, useState } from "react"
+import {useEffect, useState} from "react"
 import Button from "./Button"
 import Tags from "./Tags"
 import "../styles/saveLinkPanel.scss"
 import IconButton from "./IconButton";
-import { reactIsInDevMode } from '../utils/common'
+import {reactIsInDevMode} from '../utils/common'
 import SaveTag from "./SaveTag";
 import Error from "./Error";
 import React from 'react'
 
 /**
- * 
- * Param: existingLink: If present, the panel pre-populates fields from the link object 
+ *
+ * Param: existingLink: If present, the panel pre-populates fields from the link object
  * Fields prepopulated include name, chosenTags and tab
  * Only [linkName,tags] are editable
- * 
- * @returns 
+ *
+ * @returns
  */
-let SaveLinkPanel = ({ existingLink={}, onLinkSave, onLinkSaveCancel, tags, onTagSave }) => {
+let SaveLinkPanel = ({existingLink = {}, onLinkSave, onLinkSaveCancel, tags, onTagSave}) => {
 
     const [chosenTags, setChosenTags] = useState(existingLink.tags || [])
     const [name, setName] = useState(existingLink.linkName || '')
@@ -27,9 +27,9 @@ let SaveLinkPanel = ({ existingLink={}, onLinkSave, onLinkSaveCancel, tags, onTa
     useEffect(() => {
         async function getCurrentTab() {
             if (reactIsInDevMode()) {
-                return { url: "https://www.google.com", favIconUrl: "https://semantic-ui.com/images/logo.png", title: "Google" }
+                return {url: "https://www.google.com", favIconUrl: "https://semantic-ui.com/images/logo.png", title: "Google"}
             }
-            let queryOptions = { active: true, currentWindow: true };
+            let queryOptions = {active: true, currentWindow: true};
             // eslint-disable-next-line no-undef
             let [tab] = await chrome.tabs.query(queryOptions);
             return tab;
@@ -59,9 +59,9 @@ let SaveLinkPanel = ({ existingLink={}, onLinkSave, onLinkSaveCancel, tags, onTa
             return
         let linkToSave
         if (existingLink.url) { // editing
-            linkToSave = Object.assign({}, existingLink, { linkName: name, tags: chosenTags })
+            linkToSave = Object.assign({}, existingLink, {linkName: name, tags: chosenTags})
         } else {
-            linkToSave = { linkName: name, url: tab.url, tags: chosenTags, favIconUrl: tab.favIconUrl, desc: tab.desc }
+            linkToSave = {linkName: name, url: tab.url, tags: chosenTags, favIconUrl: tab.favIconUrl, desc: tab.desc}
         }
         onLinkSave(linkToSave)
     }
@@ -124,17 +124,17 @@ let SaveLinkPanel = ({ existingLink={}, onLinkSave, onLinkSaveCancel, tags, onTa
                 <div className="k-field mb20">
                     <label>Name</label>
                     <div className="ui small icon input">
-                        <input autoFocus className="k-input" placeholder="eg. Google" type="text" value={name} onChange={(e) => setName(e.target.value)} />
+                        <input autoFocus className="k-input" placeholder="eg. Google" type="text" value={name} onChange={(e) => setName(e.target.value)}/>
                     </div>
                     <Error errors={errors} name="name"></Error>
                 </div>
                 <div className="k-field mb20">
-                    <label>Choose Tags</label>
+                    {!!tags.length && <label>Choose Tags</label>}
                     <Tags selectedTags={chosenTags}
-                        tags={tags}
-                        onTagClick={toggleTagSelection}
-                        onTagSave={onTagSave}
-                        allowAddTag={true}></Tags>
+                          tags={tags}
+                          onTagClick={toggleTagSelection}
+                          onTagSave={onTagSave}
+                          allowAddTag={true}></Tags>
                     <Error errors={errors} name="tagName"></Error>
                     <SaveTag onTagSave={onTagSave} noTagsYet={!tags.length}></SaveTag>
                 </div>
