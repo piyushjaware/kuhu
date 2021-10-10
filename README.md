@@ -26,25 +26,36 @@ The onboarding screens are full svgs that span the whole viewport. They are expo
 
 
 
-
+Quickly get all the saved data from console
+```bash
+chrome.storage.local.get('state', result => console.log(JSON.stringify(result)))
+```
 
 
 ----
 
+Title
+Kuhu - A Simple, Clean and Organized Bookmarks Manager
+
+Summary
+Easily Save, Organize and Access Bookmarks! Filter by Tags, Search and Edit Quickly. Stay Private!
+
+
 Single purpose
-Save, Organize and Access Sites easily and quickly!
+Easily Save, Organize and Access Bookmarks!
+
 
 Description
-The Kuhu extension allows to
 
-- Save Sites or Pages you think you would need to retrieve later
-- Quickly click and launch the saved page in a new tab
-- Create tags to associate with the Pages to keep them organized
-- See all the saved Pages and easily search or filter by tags
-- Edit/delete tags or saved pages
+With Kuhu, you can
+- Save sites or pages you think you would need to retrieve later
+- Quickly click and launch a saved page in a new tab
+- Create tags to associate with the pages to keep them organized
+- See all the pages in one place and easily search or filter by tags
+- Easily edit/delete tags or pages
 
-You see pages sorted by how frequently you access them, so you can launch them even quicker!
-All your data is stored locally in the browser and not sent to Kuhu servers!
+You will see pages sorted by how frequently you access them, so you can launch them even quicker!
+All your data is private and stored locally in the browser, not sent to any servers!
 
 
 Permission justification 

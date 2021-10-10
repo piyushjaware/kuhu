@@ -1,8 +1,6 @@
 {
   "manifest_version": 3,
-  "name": "Kuhu",
-  "version": "1.0.0",
-  "description": "Saving pages made easy with Kuhu!",
+  "version": "1.0.1",
   "icons": {
     "32": "icon32.png",
     "48": "icon48.png",

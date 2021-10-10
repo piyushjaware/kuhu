@@ -14,11 +14,15 @@ import getStartedImage from "../assets/lets+get+started+image.png"
 class App extends Component {
 
     state = {
+
+        // This props are NOT saved to storage
         saveLink: false,
         selectedTags: [],
         searchTerm: '',
-        onboardingComplete: false,
         editMode: false,
+
+        // This props are SAVED to storage
+        onboardingComplete: false,
         tags: [],
         links: []
     }
@@ -41,11 +45,11 @@ class App extends Component {
     async loadData() {
 
         let data = await this.localStorage.read('state') || {tags: [], links: []}
-        console.log("localStorage.read result", data)
+        // console.log("localStorage.read result", data)
 
         // Exempt a few fields from backup 
         for (const dataKey in data) {
-            if (['saveLink', 'selectedTags', 'searchTerm'].includes(dataKey)) {
+            if (['saveLink', 'selectedTags', 'searchTerm', 'editMode'].includes(dataKey)) {
                 delete data[dataKey]
             }
         }
@@ -54,7 +58,7 @@ class App extends Component {
             data = getTestDataForDev()
         }
 
-        return data
+        return {}
     }
 
     onOnboardingComplete = () => {
@@ -81,9 +85,12 @@ class App extends Component {
 
 
     updateLinkWeight(link) {
-        let newState = Object.assign(this.state)
-        this.findLink(newState.links, link).weight++
-        this.setState(newState)
+        if (link.weight) {
+            link.weight++
+        } else {
+            link.weight = 2 // 2 because the link has been clicked. Base weight is 1.
+        }
+        this.onLinkSave(link) // just call save here with the new weight
     }
 
     onSearchTermChange = (e, searchTerm) => {
@@ -270,7 +277,10 @@ class App extends Component {
      */
     setState(state, callback) {
         // console.log('saving state to localstorage', JSON.stringify(state))
+        
         this.localStorage.save('state', state) // save to storage after any state update
+        
+        
         super.setState(state, callback)
     }
 
