@@ -53,12 +53,10 @@ class App extends Component {
                 delete data[dataKey]
             }
         }
-
         if (reactIsInDevMode()) {
             data = getTestDataForDev()
         }
-
-        return {}
+        return data
     }
 
     onOnboardingComplete = () => {
@@ -277,10 +275,10 @@ class App extends Component {
      */
     setState(state, callback) {
         // console.log('saving state to localstorage', JSON.stringify(state))
-        
+
         this.localStorage.save('state', state) // save to storage after any state update
-        
-        
+
+
         super.setState(state, callback)
     }
 
