@@ -30,7 +30,7 @@ let Header = ({showSaveBtn = true, showOptions = true, onSaveBtnClick, editMode 
         <div className="header">
             <Logo></Logo>
             <div className="actions">
-                {showSaveBtn && <Button label="Save Page" classNames="small k-btn-dark" onClick={onSaveBtnClick}>/</Button>}
+                {showSaveBtn && <Button label="Save Page" classNames="small k-btn-dark plr30" onClick={onSaveBtnClick}>/</Button>}
                 {showOptions && optionsDropdown()}
             </div>
         </div>

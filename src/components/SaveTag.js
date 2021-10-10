@@ -1,7 +1,7 @@
 import {useState} from "react";
-import Button from "./Button"
 import IconButton from "./IconButton";
 import "../styles/save-tag.scss"
+import {Button as SemanticButton, Icon as SemanticIcon} from 'semantic-ui-react'
 
 /**
  *
@@ -66,7 +66,11 @@ let SaveTag = ({existingTag = {}, onTagSave, autoLaunch = false, onCancel = ""})
                     <IconButton iconName="cancel" onClick={e => onCancelClick()}></IconButton>
                     <div className="error">{error}</div>
                 </div>
-                : <Button label="Create Tag" classNames="mini k-btn-dark hollow" onClick={e => onAddTagClick(e)}>/</Button>
+                :
+                <SemanticButton className="k-btn" icon labelPosition='right' size='mini' onClick={e => onAddTagClick(e)}>
+                    Create Tag
+                    <SemanticIcon name='add'/>
+                </SemanticButton>
             }
         </div>
     )

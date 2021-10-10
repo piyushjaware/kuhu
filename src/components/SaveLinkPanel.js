@@ -81,7 +81,7 @@ let SaveLinkPanel = ({existingLink = {}, onLinkSave, onLinkSaveCancel, tags, onT
             validationErrors.push({
                 type: 'field',
                 name: 'name',
-                msg: <React.Fragment>Please provide a <b>name</b> to the link.</React.Fragment>
+                msg: <React.Fragment>Please provide a <b>name</b> for the page.</React.Fragment>
             })
             validationSuccess = false;
         }
@@ -89,7 +89,7 @@ let SaveLinkPanel = ({existingLink = {}, onLinkSave, onLinkSaveCancel, tags, onT
             validationErrors.push({
                 type: 'field',
                 name: 'tagName',
-                msg: <React.Fragment>Please choose one or more <b>tags</b> for the link.</React.Fragment>
+                msg: <React.Fragment>Please choose one or more <b>tags</b> for the page.</React.Fragment>
             })
             validationSuccess = false;
         }
@@ -122,7 +122,7 @@ let SaveLinkPanel = ({existingLink = {}, onLinkSave, onLinkSaveCancel, tags, onT
                     <div className="url">{tab.url}</div>
                 </div>
                 <div className="k-field mb20">
-                    <label>Name</label>
+                    <label>Page Name</label>
                     <div className="ui small icon input">
                         <input autoFocus className="k-input" placeholder="eg. Google" type="text" value={name} onChange={(e) => setName(e.target.value)}/>
                     </div>
@@ -139,7 +139,7 @@ let SaveLinkPanel = ({existingLink = {}, onLinkSave, onLinkSaveCancel, tags, onT
                     <SaveTag onTagSave={onTagSave} noTagsYet={!tags.length}></SaveTag>
                 </div>
             </div>
-            <Button label="Save Link" classNames="fluid k-btn-dark mt30" onClick={onSave}>/</Button>
+            <Button label="Save Page" classNames="fluid k-btn-dark mt30" onClick={onSave}></Button>
 
         </div>
     )
