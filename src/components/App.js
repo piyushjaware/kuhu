@@ -32,30 +32,47 @@ class App extends Component {
     localStorage = new LocalStorage()
 
     async componentDidMount() {
-        console.log("App mounting ")
-        let data = await this.loadData()
-        data = handleLegacyData(data)
-        this.setState(Object.assign(this.state, data))
+        let lightData = await this.loadLightDataFromStorage()
+        this.setState(Object.assign(this.state, handleLegacyData(lightData)))
+        let heavyData = await this.loadHeavyDataFromStorage()
+        this.setState(Object.assign(this.state, handleLegacyData(heavyData)))
     }
 
     componentWillUnmount() {
         console.log("App unmounting")
     }
 
-    async loadData() {
-
-        let data = await this.localStorage.read('state') || {tags: [], links: []}
+    async loadLightDataFromStorage() {
+        let onboardingComplete = await this.localStorage.read('onboardingComplete') || false
+        let tags = await this.localStorage.read('tags') || []
         // console.log("localStorage.read result", data)
-
-        // Exempt a few fields from backup 
-        for (const dataKey in data) {
-            if (['saveLink', 'selectedTags', 'searchTerm', 'editMode'].includes(dataKey)) {
-                delete data[dataKey]
-            }
-        }
         if (reactIsInDevMode()) {
-            data = getTestDataForDev()
+            const testData = getTestDataForDev()
+            onboardingComplete = testData.onboardingComplete
+            tags = testData.tags
         }
+        let data = {onboardingComplete, tags}
+        return data
+    }
+
+    saveDataToStorage(state) {
+        this.localStorage.save('onboardingComplete', state.onboardingComplete)
+        if (state.tags.length) {
+            this.localStorage.save('tags', state.tags)
+        }
+        if (state.links.length) {
+            this.localStorage.save('links', state.links)
+        }
+    }
+
+    async loadHeavyDataFromStorage() {
+        let links = await this.localStorage.read('links') || []
+        // console.log("localStorage.read result", data)
+        if (reactIsInDevMode()) {
+            const testData = getTestDataForDev()
+            links = testData.links
+        }
+        let data = {links}
         return data
     }
 
@@ -264,21 +281,17 @@ class App extends Component {
     }
 
     getAllLinks() {
-        return this.state.links
-            .sort(this.sortLinks)
+        return this.state.links.sort(this.sortLinks)
     }
 
-    sortLinks = (a, b) => b.weight - a.weight // by weight desc
+    sortLinks = (a, b) => b.weight || 1 - a.weight || 1 // by weight desc
 
     /**
      * Overriding the setState to also save the state to chrome storage in addition to setting the react state
      */
     setState(state, callback) {
         // console.log('saving state to localstorage', JSON.stringify(state))
-
-        this.localStorage.save('state', state) // save to storage after any state update
-
-
+        this.saveDataToStorage(state);
         super.setState(state, callback)
     }
 

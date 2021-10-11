@@ -68,7 +68,8 @@ export class LocalStorage {
 
 export function getTestDataForDev() {
     return {
-        "editMode": false,
+        "onboardingComplete": true,
+        "tags": [{"tagName": "shopping"}, {"tagName": "reading"}, {"tagName": "storage"}, {"tagName": "banking"}, {"tagName": "personal"}, {"tagName": "work"}, {"tagName": "social"}],
         "links": [{
             "desc": "Etsy - Shop for handmade, vintage, custom, and unique gifts for everyone",
             "favIconUrl": "https://www.etsy.com/favicon.ico",
@@ -165,12 +166,7 @@ export function getTestDataForDev() {
             "linkName": "Google Drive",
             "tags": ["storage"],
             "url": "https://drive.google.com/drive/u/0/my-drive"
-        }],
-        "onboardingComplete": true,
-        "saveLink": false,
-        "searchTerm": "",
-        "selectedTags": [],
-        "tags": [{"tagName": "shopping"}, {"tagName": "reading"}, {"tagName": "storage"}, {"tagName": "banking"}, {"tagName": "personal"}, {"tagName": "work"}, {"tagName": "social"}]
+        }]
     }
 }
 

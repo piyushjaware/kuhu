@@ -1,6 +1,7 @@
 {
   "manifest_version": 3,
   "version": "1.0.1",
+  "name": "Kuhu",
   "icons": {
     "32": "icon32.png",
     "48": "icon48.png",
