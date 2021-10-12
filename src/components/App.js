@@ -15,13 +15,13 @@ class App extends Component {
 
     state = {
 
-        // This props are NOT saved to storage
+        // These props are NOT saved to storage
         saveLink: false,
         selectedTags: [],
         searchTerm: '',
         editMode: false,
 
-        // This props are SAVED to storage
+        // These props are SAVED to storage
         onboardingComplete: false,
         tags: [],
         links: []
