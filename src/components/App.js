@@ -9,6 +9,7 @@ import Tags from "./Tags"
 import {Component} from "react"
 import OnboardingGraphic from "./OnboardingGraphic"
 import getStartedImage from "../assets/lets+get+started+image.png"
+import {default as ls} from "../services/link-service";
 
 
 class App extends Component {
@@ -207,7 +208,7 @@ class App extends Component {
     }
 
     linkAlreadyExists(link) {
-        return !!this.findLink(this.state.links, link)
+        return !!ls.findLink(this.state.links, link)
     }
 
     findTag(tags, tag) {
@@ -216,10 +217,6 @@ class App extends Component {
 
     findTagIndex(tags, tag) {
         return tags.findIndex((t) => t.tagName === tag.tagName)
-    }
-
-    findLink(links, link) {
-        return links.find((l) => l.url === link.url)
     }
 
     findLinkIndex(links, link) {
