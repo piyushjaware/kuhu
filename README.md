@@ -1,52 +1,40 @@
-
-
-no split proto (not working yet)
-Add this to package.json
-`node ./scripts/build-non-split.js`
-
-
-
-export files for extension
-make build-ext
-
 # Kuhu   
 
 
-Choose `load unpacked` in chrome extensions to create the extension in dev mode.
-To build the extension, just do `make build` and then resources should be available in the  `chrome-extension` folder in project root.
-This should refresh extension automatically. No need to refresh or reload the extension from chrome.
 
-
-Clear chrome sync storage
-Do `chrome.storage.sync.clear()` in console.
-
-
-
-The onboarding screens are full svgs that span the whole viewport. They are exported directly from the xd Kuhu project.
-
-
-
-Quickly get all the saved data from console
-```bash
-chrome.storage.local.get('state', result => console.log(JSON.stringify(result)))
+How to run locally as a site?
+``` sh
+make install (first time only)
+make run
 ```
 
+### How to install extension locally on chrome based browsers?
+
+First, run the below make targets
+``` sh
+make install (first time only)
+make build
+```
+
+In chrome extensions page, choose `load unpacked` to create the extension in dev mode and point it to `chrome-extension` folder in project root.
+
+The installed extension would refresh automatically everytime you do a `make build`. No need to refresh or reload the extension from chrome.
 
 ----
+## Publishing Details
 
-Title
+### Title
 Kuhu - A Simple, Clean and Organized Bookmarks Manager
 
-Summary
+### Summary
 Easily Save, Organize and Access Bookmarks! Filter by Tags, Search and Edit Quickly. Stay Private!
 
 
-Single purpose
+### Single purpose
 Easily Save, Organize and Access Bookmarks!
 
 
-Description
-
+### Description
 With Kuhu, you can
 - Save sites or pages you think you would need to retrieve later
 - Quickly click and launch a saved page in a new tab
@@ -58,10 +46,25 @@ You will see pages sorted by how frequently you access them, so you can launch t
 All your data is private and stored locally in the browser, not sent to any servers!
 
 
-Permission justification 
-
-activeTab
+### Permissions justification 
+- activeTab:
 Get the URL, title, and favicon for that tab using the chrome.tabs api.
 
-storage
+- storage:
 Store and retrieve user data in the local storage.
+
+
+
+
+----
+
+#### Handy things
+##### Clear chrome sync storage
+Do `chrome.storage.sync.clear()` in console.
+
+##### Quickly get all the saved data from console
+```bash
+chrome.storage.local.get('state', result => console.log(JSON.stringify(result)))
+```
+
+----
